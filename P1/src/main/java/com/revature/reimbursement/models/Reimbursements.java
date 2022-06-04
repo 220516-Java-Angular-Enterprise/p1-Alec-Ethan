@@ -26,6 +26,10 @@ public class Reimbursements {
         this.type_id = type_id;
     }
 
+    public Reimbursements() {
+
+    }
+
     //<editor-fold desc="Get/Set">
     public String getId() {
         return id;

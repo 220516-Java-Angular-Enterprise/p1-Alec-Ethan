@@ -65,3 +65,4 @@ yarn.lock
 /.idea/libraries  
 .idea  
 libraries  
+P1/src/main/resources/db.properties

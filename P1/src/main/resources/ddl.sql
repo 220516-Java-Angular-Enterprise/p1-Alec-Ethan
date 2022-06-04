@@ -56,7 +56,7 @@ CREATE TABLE reimbursements(
 	id varchar,
 	amount numeric(6,2),
 	submitted timestamp NOT NULL,
-	resovled timestamp,
+	resolved timestamp,
 	description varchar NOT NULL,
 	receipt bytea,
 	payment_id varchar,
