@@ -9,6 +9,10 @@ public class ReimbursementTypes {
         this.type = type;
     }
 
+    public ReimbursementTypes() {
+
+    }
+
     //<editor-fold desc="Get/Set">
     public String getId() {
         return id;

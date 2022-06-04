@@ -9,6 +9,10 @@ public class ReimbursementStatus {
         this.status = status;
     }
 
+    public ReimbursementStatus() {
+
+    }
+
     //<editor-fold desc="Get/Set">
     public String getId() {
         return id;
