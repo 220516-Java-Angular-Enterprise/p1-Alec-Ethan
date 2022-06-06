@@ -1,5 +1,6 @@
 package com.revature.reimbursement.daos;
 
+import com.revature.reimbursement.models.ReimbursementStatus;
 import com.revature.reimbursement.models.ReimbursementTypes;
 import com.revature.reimbursement.util.customException.InvalidSQLException;
 import com.revature.reimbursement.util.database.DatabaseConnection;
@@ -81,6 +82,45 @@ public class ReimbursementTypesDAO implements CrudDAO<ReimbursementTypes> {
             }
         } catch (SQLException e) {
             throw new InvalidSQLException("An error occurred when tyring to get a Reimbursement Type by ID from the DataBase");
+        }
+        return rems;
+    }
+
+    @Override
+    public ReimbursementTypes getRowByColumnValue(String column, String input){
+        ReimbursementTypes row = new ReimbursementTypes();
+        try {
+
+            PreparedStatement ps = DatabaseConnection.getCon().prepareStatement("SELECT * FROM reimbursement_types WHERE " + column + " = " + input);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next())  {
+                row.setId(rs.getString("id"));
+                row.setType(rs.getString("status"));
+            }
+        } catch (SQLException e) {
+            throw new InvalidSQLException("An error occurred when tyring to get a Reimbursement by " + column + "using value: " + input);
+        }
+
+        return row;
+
+    }
+
+    @Override
+    public List<ReimbursementTypes> getAllRowsByColumnValue(String column, String input) {
+        List<ReimbursementTypes> rems = new ArrayList<>();
+        try {
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM reimbursement_types WHERE " + column + " = " + input);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                ReimbursementTypes rem = new ReimbursementTypes(
+                        rs.getString("id"),
+                        rs.getString("type"));
+                rems.add(rem);
+            }
+        } catch (SQLException e) {
+            throw new InvalidSQLException("An error occurred when tyring to get all ReimbursementTypes by " + column + "using value: " + input);
         }
         return rems;
     }

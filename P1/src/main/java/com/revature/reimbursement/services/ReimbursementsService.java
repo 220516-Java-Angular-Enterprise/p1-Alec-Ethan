@@ -22,4 +22,11 @@ public class ReimbursementsService {
     public void deleteReimbursement(String id) { reimbursementsDAO.delete(id); }
     public Reimbursements getById(String id) { return reimbursementsDAO.getById(id); }
     public List<Reimbursements> getAll() { return reimbursementsDAO.getAll(); }
+
+    public Reimbursements getRowByColumnValue(String column, String value) {
+        return reimbursementsDAO.getRowByColumnValue(column, value);
+    }
+    public List<Reimbursements> getAllRowsByColumnValue(String column, String value) {
+        return reimbursementsDAO.getAllRowsByColumnValue(column, value);
+    }
 }

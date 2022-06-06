@@ -7,4 +7,6 @@ public interface CrudDAO<T> {
     void delete(String id);
     T getById(String id);
     List<T> getAll();
+    T getRowByColumnValue(String column, String value);
+    List<T> getAllRowsByColumnValue(String column, String value);
 }
