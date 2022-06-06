@@ -115,4 +115,62 @@ public class ReimbursementsDAO implements CrudDAO<Reimbursements> {
         }
         return rems;
     }
+
+    @Override
+    public Reimbursements getRowByColumnValue(String column, String input){
+        Reimbursements row = new Reimbursements();
+        try {
+
+            PreparedStatement ps = DatabaseConnection.getCon().prepareStatement("SELECT * FROM reimbursements WHERE " + column + " = " + input);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next())  {
+
+                row.setId(rs.getString("id"));
+                row.setAmount(rs.getDouble("amount"));
+                row.setSubmitted(rs.getTimestamp("submitted"));
+                row.setResolved(rs.getTimestamp("resolved"));
+                row.setDescription(rs.getString("description"));
+                row.setReceipt(rs.getBlob("receipt"));
+                row.setPayment_id(rs.getString("payment_id"));
+                row.setAuthor_id(rs.getString("author_id"));
+                row.setResolver_id(rs.getString("resolver_id"));
+                row.setStatus_id(rs.getString("status_id"));
+                row.setType_id(rs.getString("type_id"));
+            }
+        } catch (SQLException e) {
+            throw new InvalidSQLException("An error occurred when tyring to get a Reimbursement by " + column + "using value: " + input);
+        }
+
+        return row;
+
+    }
+
+    @Override
+    public List<Reimbursements> getAllRowsByColumnValue(String column, String input) {
+        List<Reimbursements> rems = new ArrayList<>();
+        try {
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM reimbursements WHERE " + column + " = " + input);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Reimbursements rem = new Reimbursements(
+                        rs.getString("id"),
+                        rs.getDouble("amount"),
+                        rs.getTimestamp("submitted"),
+                        rs.getTimestamp("resolved"),
+                        rs.getString("description"),
+                        rs.getBlob("receipt"),
+                        rs.getString("payment_id"),
+                        rs.getString("author_id"),
+                        rs.getString("resolver_id"),
+                        rs.getString("status_id"),
+                        rs.getString("type_id"));
+                rems.add(rem);
+            }
+        } catch (SQLException e) {
+            throw new InvalidSQLException("An error occurred when tyring to get all Reimbursements by " + column + "using value: " + input);
+        }
+        return rems;
+    }
 }
