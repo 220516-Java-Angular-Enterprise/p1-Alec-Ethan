@@ -71,7 +71,7 @@ public class ReimbursementTypesDAO implements CrudDAO<ReimbursementTypes> {
     public List<ReimbursementTypes> getAll() {
         List<ReimbursementTypes> rems = new ArrayList<>();
         try {
-            PreparedStatement ps = con.prepareStatement("SELECT * FROM reimbursements");
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM reimbursement_types");
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -99,7 +99,7 @@ public class ReimbursementTypesDAO implements CrudDAO<ReimbursementTypes> {
                 row.setType(rs.getString("status"));
             }
         } catch (SQLException e) {
-            throw new InvalidSQLException("An error occurred when tyring to get a Reimbursement by " + column + "using value: " + input);
+            throw new InvalidSQLException("An error occurred when tyring to get a reimbursement_types by " + column + "using value: " + input);
         }
 
         return row;
