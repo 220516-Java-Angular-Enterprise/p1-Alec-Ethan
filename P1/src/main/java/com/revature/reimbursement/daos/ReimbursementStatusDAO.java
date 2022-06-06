@@ -18,7 +18,7 @@ public class ReimbursementStatusDAO implements CrudDAO<ReimbursementStatus> {
     @Override
     public void save(ReimbursementStatus obj) {
         try {
-            PreparedStatement ps = con.prepareStatement("INSERT INTO reimbursements (id, status) " +
+            PreparedStatement ps = con.prepareStatement("INSERT INTO reimbursement_statuses (id, status) " +
                     "VALUES (?, ?)");
             ps.setString(1, obj.getId());
             ps.setString(2, obj.getStatus());
@@ -97,7 +97,7 @@ public class ReimbursementStatusDAO implements CrudDAO<ReimbursementStatus> {
                 row.setStatus(rs.getString("status"));
             }
         } catch (SQLException e) {
-            throw new InvalidSQLException("An error occurred when tyring to get a Reimbursement by " + column + "using value: " + input);
+            throw new InvalidSQLException("An error occurred when tyring to get a reimbursement_statuses by " + column + "using value: " + input);
         }
 
         return row;
