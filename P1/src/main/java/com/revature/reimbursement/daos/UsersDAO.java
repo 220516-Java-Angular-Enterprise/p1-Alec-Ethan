@@ -155,4 +155,21 @@ public class UsersDAO implements CrudDAO<Users> {
         }
         return rems;
     }
+
+    public List<String> getAllUsernames() {
+        List<String> usernames = new ArrayList<>();
+
+        try {
+            PreparedStatement ps = con.prepareStatement("SELECT username FROM users");
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                usernames.add(rs.getString("username").toLowerCase());
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("An error occurred when tyring to get data from to the database.");
+        }
+
+        return usernames;
+    }
 }
