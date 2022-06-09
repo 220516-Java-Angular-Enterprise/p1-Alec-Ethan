@@ -55,6 +55,12 @@
             <version>0.9.1</version>
         </dependency>
 
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.0</version>
+        </dependency>
+
     </dependencies>
 
     <properties>
@@ -72,7 +78,7 @@
                     <configuration>
                         <url>http://localhost:8080/manager/text</url>
                         <server>LocalTomcat</server>
-                        <path>/test-app</path>
+                        <path>/reimbursements</path>
                         <update>true</update>
                         <username>admin</username>
                         <password>revature</password>
