@@ -3,6 +3,7 @@ package com.revature.reimbursement.daos;
 import com.revature.reimbursement.models.ReimbursementTypes;
 import com.revature.reimbursement.models.UserRoles;
 import com.revature.reimbursement.util.customException.InvalidSQLException;
+import com.revature.reimbursement.util.database.ConnectionFactory;
 import com.revature.reimbursement.util.database.DatabaseConnection;
 
 import java.sql.Connection;
@@ -13,11 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserRolesDAO implements CrudDAO<UserRoles> {
-    Connection con = DatabaseConnection.getCon();
+    //Connection con = DatabaseConnection.getCon();
 
     @Override
     public void save(UserRoles obj) {
-        try {
+        try (Connection con = ConnectionFactory.getInstance().getConnection()){
             PreparedStatement ps = con.prepareStatement("INSERT INTO user_roles (id, role)" +
                     "VALUES (?, ?)");
             ps.setString(1, obj.getId());
@@ -37,7 +38,7 @@ public class UserRolesDAO implements CrudDAO<UserRoles> {
 
     @Override
     public void delete(String id) {
-        try {
+        try (Connection con = ConnectionFactory.getInstance().getConnection()){
             PreparedStatement ps = con.prepareStatement("DELETE FROM user_roles WHERE id = ?");
             ps.setString(1, id);
             ps.executeUpdate();
@@ -50,7 +51,7 @@ public class UserRolesDAO implements CrudDAO<UserRoles> {
     public UserRoles getById(String id) {
         UserRoles rem = new UserRoles();
 
-        try {
+        try (Connection con = ConnectionFactory.getInstance().getConnection()){
             PreparedStatement ps = con.prepareStatement("SELECT * FROM user_roles WHERE id = ?");
             ps.setString(1, id);
             ResultSet rs = ps.executeQuery();
@@ -70,7 +71,7 @@ public class UserRolesDAO implements CrudDAO<UserRoles> {
     @Override
     public List<UserRoles> getAll() {
         List<UserRoles> rems = new ArrayList<UserRoles>();
-        try {
+        try (Connection con = ConnectionFactory.getInstance().getConnection()){
             PreparedStatement ps = con.prepareStatement("SELECT * FROM user_roles");
             ResultSet rs = ps.executeQuery();
 
@@ -89,7 +90,7 @@ public class UserRolesDAO implements CrudDAO<UserRoles> {
     @Override
     public UserRoles getRowByColumnValue(String column, String input){
         UserRoles row = new UserRoles();
-        try {
+        try (Connection con = ConnectionFactory.getInstance().getConnection()){
 
             PreparedStatement ps = DatabaseConnection.getCon().prepareStatement("SELECT * FROM user_roles WHERE " + column + " = " + input);
             ResultSet rs = ps.executeQuery();
@@ -109,7 +110,7 @@ public class UserRolesDAO implements CrudDAO<UserRoles> {
     @Override
     public List<UserRoles> getAllRowsByColumnValue(String column, String input) {
         List<UserRoles> rems = new ArrayList<UserRoles>();
-        try {
+        try (Connection con = ConnectionFactory.getInstance().getConnection()){
             PreparedStatement ps = con.prepareStatement("SELECT * FROM user_roles WHERE " + column + " = " + input);
             ResultSet rs = ps.executeQuery();
 

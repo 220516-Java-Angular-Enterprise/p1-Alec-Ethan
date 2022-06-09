@@ -2,6 +2,7 @@ package com.revature.reimbursement.daos;
 
 import com.revature.reimbursement.models.Reimbursements;
 import com.revature.reimbursement.util.customException.InvalidSQLException;
+import com.revature.reimbursement.util.database.ConnectionFactory;
 import com.revature.reimbursement.util.database.DatabaseConnection;
 
 import java.sql.Connection;
@@ -9,15 +10,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ReimbursementsDAO implements CrudDAO<Reimbursements> {
 
-    Connection con = DatabaseConnection.getCon();
+    //Connection con = DatabaseConnection.getCon();
 
     @Override
     public void save(Reimbursements obj) {
-        try {
+        try (Connection con = ConnectionFactory.getInstance().getConnection()){
             PreparedStatement ps = con.prepareStatement("INSERT INTO reimbursements (id, amount, submitted, resolved, " +
                     "description, receipt, payment_id, author_id, resolver_id, status_id, type_id) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -49,7 +51,7 @@ public class ReimbursementsDAO implements CrudDAO<Reimbursements> {
 
     @Override
     public void delete(String id) {
-        try {
+        try (Connection con = ConnectionFactory.getInstance().getConnection()){
             PreparedStatement ps = con.prepareStatement("DELETE FROM reimbursements WHERE id = ?");
             ps.setString(1, id);
             ps.executeUpdate();
@@ -62,7 +64,7 @@ public class ReimbursementsDAO implements CrudDAO<Reimbursements> {
     public Reimbursements getById(String id) {
         Reimbursements rem = new Reimbursements();
 
-        try {
+        try (Connection con = ConnectionFactory.getInstance().getConnection()){
             PreparedStatement ps = con.prepareStatement("SELECT * FROM reimbursements WHERE id = ?");
             ps.setString(1, id);
             ResultSet rs = ps.executeQuery();
@@ -91,7 +93,7 @@ public class ReimbursementsDAO implements CrudDAO<Reimbursements> {
     @Override
     public List<Reimbursements> getAll() {
         List<Reimbursements> rems = new ArrayList<>();
-        try {
+        try (Connection con = ConnectionFactory.getInstance().getConnection()){
             PreparedStatement ps = con.prepareStatement("SELECT * FROM reimbursements");
             ResultSet rs = ps.executeQuery();
 
@@ -149,7 +151,7 @@ public class ReimbursementsDAO implements CrudDAO<Reimbursements> {
     @Override
     public List<Reimbursements> getAllRowsByColumnValue(String column, String input) {
         List<Reimbursements> rems = new ArrayList<>();
-        try {
+        try (Connection con = ConnectionFactory.getInstance().getConnection()){
             PreparedStatement ps = con.prepareStatement("SELECT * FROM reimbursements WHERE " + column + " = " + input);
             ResultSet rs = ps.executeQuery();
 

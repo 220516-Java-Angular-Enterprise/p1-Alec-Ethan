@@ -3,6 +3,7 @@ package com.revature.reimbursement.daos;
 import com.revature.reimbursement.models.ReimbursementTypes;
 import com.revature.reimbursement.models.Users;
 import com.revature.reimbursement.util.customException.InvalidSQLException;
+import com.revature.reimbursement.util.database.ConnectionFactory;
 import com.revature.reimbursement.util.database.DatabaseConnection;
 
 import java.sql.Connection;
@@ -13,11 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UsersDAO implements CrudDAO<Users> {
-    Connection con = DatabaseConnection.getCon();
+    //Connection con = DatabaseConnection.getCon();
 
     @Override
     public void save(Users obj) {
-        try {
+        try (Connection con = ConnectionFactory.getInstance().getConnection()){
             PreparedStatement ps = con.prepareStatement("INSERT INTO users (id, username, email, password, given_name, surname, is_active, role_id)" +
                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
             ps.setString(1, obj.getId());
@@ -43,7 +44,7 @@ public class UsersDAO implements CrudDAO<Users> {
 
     @Override
     public void delete(String id) {
-        try {
+        try (Connection con = ConnectionFactory.getInstance().getConnection()){
             PreparedStatement ps = con.prepareStatement("DELETE FROM users WHERE id = ?");
             ps.setString(1, id);
             ps.executeUpdate();
@@ -56,7 +57,7 @@ public class UsersDAO implements CrudDAO<Users> {
     public Users getById(String id) {
         Users rem = new Users();
 
-        try {
+        try (Connection con = ConnectionFactory.getInstance().getConnection()){
             PreparedStatement ps = con.prepareStatement("SELECT * FROM users WHERE id = ?");
             ps.setString(1, id);
             ResultSet rs = ps.executeQuery();
@@ -82,7 +83,7 @@ public class UsersDAO implements CrudDAO<Users> {
     @Override
     public List<Users> getAll() {
         List<Users> rems = new ArrayList<Users>();
-        try {
+        try (Connection con = ConnectionFactory.getInstance().getConnection()){
             PreparedStatement ps = con.prepareStatement("SELECT * FROM users");
             ResultSet rs = ps.executeQuery();
 
@@ -108,7 +109,7 @@ public class UsersDAO implements CrudDAO<Users> {
     @Override
     public Users getRowByColumnValue(String column, String input){
         Users row = new Users();
-        try {
+        try (Connection con = ConnectionFactory.getInstance().getConnection()){
 
             PreparedStatement ps = DatabaseConnection.getCon().prepareStatement("SELECT * FROM users WHERE " + column + " = " + input);
             ResultSet rs = ps.executeQuery();
@@ -134,7 +135,7 @@ public class UsersDAO implements CrudDAO<Users> {
     @Override
     public List<Users> getAllRowsByColumnValue(String column, String input) {
         List<Users> rems = new ArrayList<Users>();
-        try {
+        try (Connection con = ConnectionFactory.getInstance().getConnection()){
             PreparedStatement ps = con.prepareStatement("SELECT * FROM users WHERE " + column + " = " + input);
             ResultSet rs = ps.executeQuery();
 
@@ -159,7 +160,7 @@ public class UsersDAO implements CrudDAO<Users> {
     public List<String> getAllUsernames() {
         List<String> usernames = new ArrayList<>();
 
-        try {
+        try (Connection con = ConnectionFactory.getInstance().getConnection()){
             PreparedStatement ps = con.prepareStatement("SELECT username FROM users");
             ResultSet rs = ps.executeQuery();
 
