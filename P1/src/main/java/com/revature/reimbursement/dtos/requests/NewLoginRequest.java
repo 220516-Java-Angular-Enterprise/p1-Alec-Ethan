@@ -3,7 +3,11 @@ package com.revature.reimbursement.dtos.requests;
 public class NewLoginRequest {
     private String username, password;
 
-    NewLoginRequest(String username, String password){
+    public NewLoginRequest() {
+        super();
+    }
+
+    public NewLoginRequest(String username, String password){
         this.username = username;
         this.password = password;
     }
