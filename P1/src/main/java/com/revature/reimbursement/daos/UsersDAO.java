@@ -28,7 +28,6 @@ public class UsersDAO implements CrudDAO<Users> {
             ps.setString(6, obj.getSurname());
             ps.setBoolean(7, obj.isIs_active());
             ps.setString(8, obj.getRole_id());
-
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new InvalidSQLException("An error occurred when trying to save a new Users type to the Data Base.");

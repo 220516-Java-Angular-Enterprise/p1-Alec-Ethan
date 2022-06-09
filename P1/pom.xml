@@ -61,8 +61,10 @@
                     <configuration>
                         <url>http://localhost:8080/manager/text</url>
                         <server>LocalTomcat</server>
-                        <path>/test-app</path>
+                        <path>/reimbursements</path>
                         <update>true</update>
+                        <username>admin</username>
+                        <password>revature</password>
                     </configuration>
                 </plugin>
             </plugins>

@@ -7,9 +7,7 @@ public class NewUserRequest {
     private String id, username, email, password, given_name, surname, role_id;
     private boolean is_active;
 
-    public NewUserRequest() {
-        super();
-    }
+    public NewUserRequest() { }
 
     public NewUserRequest(String id, String username, String email, String password, String given_name, String surname, String role_id, boolean is_active) {
         this.id = id;
@@ -22,6 +20,16 @@ public class NewUserRequest {
         this.is_active = is_active;
     }
 
+    public NewUserRequest(String username, String email, String password, String given_name, String surname, String role_id) {
+        this.id = "0";
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.given_name = given_name;
+        this.surname = surname;
+        this.role_id = role_id;
+        this.is_active = false;
+    }
 
     //Change Role ID to getRoleByID!!!!!
     public Users extractUser() {

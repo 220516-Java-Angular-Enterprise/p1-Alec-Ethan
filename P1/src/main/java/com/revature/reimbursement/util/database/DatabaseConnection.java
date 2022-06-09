@@ -20,8 +20,9 @@ public class DatabaseConnection {
             /* importing the jdbc jar file into jvm */
             Class.forName("org.postgresql.Driver");
 
+            //POSSIBLE ERROR HERE
             /* using prop object to load url, username, password */
-            prop.load(new FileReader("src/main/resources/db.properties"));
+            prop.load(new FileReader("C:/Users/ethan/Documents/REVCODE/java-angular/projects/p1-Alec-Ethan/P1/src/main/resources/db.properties"));
 
             /* actually getting this connection */
             con = DriverManager.getConnection(prop.getProperty("url"), prop.getProperty("username"), prop.getProperty("password"));

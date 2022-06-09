@@ -16,12 +16,14 @@ public class Users {
     }
 
     public Users(String username, String email, String password, String given_name, String surname, String role_id) {
+        this.id = "0";
         this.username = username;
         this.email = email;
         this.password = password;
         this.given_name = given_name;
         this.surname = surname;
         this.role_id = role_id;
+        this.is_active = true;
     }
 
     public Users() {

@@ -17,10 +17,8 @@ public class ContextLoaderListener implements ServletContextListener {
 
         /* ObjectMapper provides functionality for reading and writing JSON, either to and from basic POJOs (Plain Old Java Objects) */
         ObjectMapper mapper = new ObjectMapper();
-
         /* Dependency injection. */
         UsersServlet userServlet = new UsersServlet(mapper, new UsersService(new UsersDAO()));
-
         /* Need ServletContext class to map whatever servlet to url path. */
         ServletContext context = sce.getServletContext();
         context.addServlet("UsersServlet", userServlet).addMapping("/users/*");
