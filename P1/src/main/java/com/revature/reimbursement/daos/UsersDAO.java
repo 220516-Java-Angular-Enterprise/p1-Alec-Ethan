@@ -20,7 +20,7 @@ public class UsersDAO implements CrudDAO<Users> {
     public void save(Users obj) {
         try (Connection con = ConnectionFactory.getInstance().getConnection()){
             PreparedStatement ps = con.prepareStatement("INSERT INTO users (id, username, email, password, given_name, surname, is_active, role_id)" +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+                    "VALUES (?, ?, ?, crypt(?, get_salt('bf')), ?, ?, ?, ?)");
             ps.setString(1, obj.getId());
             ps.setString(2, obj.getUsername());
             ps.setString(3, obj.getEmail());

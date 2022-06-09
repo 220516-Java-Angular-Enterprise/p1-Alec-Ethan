@@ -2,6 +2,7 @@ package com.revature.reimbursement.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.reimbursement.daos.UsersDAO;
+import com.revature.reimbursement.services.TokenService;
 import com.revature.reimbursement.services.UsersService;
 import com.revature.reimbursement.servlets.LoginServlet;
 import com.revature.reimbursement.servlets.UsersServlet;
@@ -20,8 +21,8 @@ public class ContextLoaderListener implements ServletContextListener {
         ObjectMapper mapper = new ObjectMapper();
 
         /* Dependency injection. */
-        UsersServlet userServlet = new UsersServlet(mapper, new UsersService(new UsersDAO()));
-        LoginServlet loginServlet = new LoginServlet(mapper, new UsersService(new UsersDAO()));
+        UsersServlet userServlet = new UsersServlet(mapper, new UsersService(new UsersDAO()), new TokenService(new JwtConfig()));
+        LoginServlet loginServlet = new LoginServlet(mapper, new UsersService(new UsersDAO()), new TokenService(new JwtConfig()));
 
         /* Need ServletContext class to map whatever servlet to url path. */
         ServletContext context = sce.getServletContext();

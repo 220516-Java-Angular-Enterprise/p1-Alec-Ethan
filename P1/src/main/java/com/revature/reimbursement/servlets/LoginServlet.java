@@ -3,7 +3,9 @@ package com.revature.reimbursement.servlets;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.reimbursement.dtos.requests.NewLoginRequest;
 import com.revature.reimbursement.dtos.requests.NewUserRequest;
+import com.revature.reimbursement.dtos.responses.Principal;
 import com.revature.reimbursement.models.Users;
+import com.revature.reimbursement.services.TokenService;
 import com.revature.reimbursement.services.UsersService;
 import com.revature.reimbursement.util.annotations.Inject;
 import com.revature.reimbursement.util.customException.InvalidRequestException;
@@ -19,21 +21,25 @@ public class LoginServlet extends HttpServlet {
     @Inject
     private final ObjectMapper mapper;
     private final UsersService userService;
+    private final TokenService tokenService;
 
     @Inject
-    public LoginServlet(ObjectMapper mapper, UsersService userService) {
+    public LoginServlet(ObjectMapper mapper, UsersService userService, TokenService tokenService) {
         this.mapper = mapper;
         this.userService = userService;
+        this.tokenService = tokenService;
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
             NewLoginRequest request = mapper.readValue(req.getInputStream(), NewLoginRequest.class);
-            Users createdUser = userService.login(request);
-            resp.setStatus(201); // CREATED
+            Principal principal = new Principal(userService.login(request));
+
+            String token = tokenService.generateToken(principal);
+            resp.setHeader("Authorization", token);
             resp.setContentType("application/json");
-            resp.getWriter().write(mapper.writeValueAsString(createdUser.getId()));
+            resp.getWriter().write(mapper.writeValueAsString(principal));
         } catch (InvalidRequestException e) {
             resp.setStatus(404); // BAD REQUEST
             e.printStackTrace();
