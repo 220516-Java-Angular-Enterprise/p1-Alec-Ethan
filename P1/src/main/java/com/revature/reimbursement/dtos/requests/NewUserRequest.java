@@ -33,7 +33,7 @@ public class NewUserRequest {
         return new Users(username, email, password, given_name, surname, role_id);
     }
 
-
+//<editor-fold desc = Get/Set>
     public String getId() {
         return id;
     }
@@ -97,6 +97,7 @@ public class NewUserRequest {
     public void setIs_active(boolean is_active) {
         this.is_active = is_active;
     }
+    //</editor-fold>
 
     @Override
     public String toString() {

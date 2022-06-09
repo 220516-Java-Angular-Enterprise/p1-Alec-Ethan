@@ -1,6 +1,7 @@
 package com.revature.reimbursement.services;
 
 import com.revature.reimbursement.daos.UsersDAO;
+import com.revature.reimbursement.dtos.requests.NewLoginRequest;
 import com.revature.reimbursement.dtos.requests.NewUserRequest;
 import com.revature.reimbursement.models.Users;
 import com.revature.reimbursement.util.annotations.Inject;
@@ -21,9 +22,12 @@ public class UsersService {
         this.usersDAO = usersDAO;
     }
 
-    public Users login(String username, String password) {
+    public Users login(NewLoginRequest newLogin) {
         /* List<User> users = new ArrayList<>() */
         /* users = userDAO.getAll() */
+
+        String username = newLogin.getUsername();
+        String password = newLogin.getPassword();
 
         Users user = new Users();
         List<Users> users = usersDAO.getAll();
