@@ -20,7 +20,7 @@ public class UsersDAO implements CrudDAO<Users> {
     public void save(Users obj) {
         try (Connection con = ConnectionFactory.getInstance().getConnection()){
             PreparedStatement ps = con.prepareStatement("INSERT INTO users (id, username, email, password, given_name, surname, is_active, role_id)" +
-                    "VALUES (?, ?, ?, crypt(?, get_salt('bf')), ?, ?, ?, ?)");
+                    "VALUES (?, ?, ?,  crypt(?, gen_salt('bf')), ?, ?, ?, ?)");
             ps.setString(1, obj.getId());
             ps.setString(2, obj.getUsername());
             ps.setString(3, obj.getEmail());
@@ -29,7 +29,6 @@ public class UsersDAO implements CrudDAO<Users> {
             ps.setString(6, obj.getSurname());
             ps.setBoolean(7, obj.isIs_active());
             ps.setString(8, obj.getRole_id());
-
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new InvalidSQLException("An error occurred when trying to save a new Users type to the Data Base.");
@@ -155,6 +154,28 @@ public class UsersDAO implements CrudDAO<Users> {
             throw new InvalidSQLException("An error occurred when tyring to get all Users by " + column + "using value: " + input);
         }
         return rems;
+    }
+
+    public Users getUserByUsernameAndPassword(String username, String password) {
+        Users user = null;
+
+        try (Connection con = ConnectionFactory.getInstance().getConnection()) {
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM users WHERE username = ? AND password = crypt(?, password)");
+            ps.setString(1, username);
+            ps.setString(2, password);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                user = new Users(rs.getString("id"), rs.getString("username"),
+                        rs.getString("email"), rs.getString("password"),
+                        rs.getString("given_name"), rs.getString("surname"),
+                        rs.getString("role_id"), rs.getBoolean("is_active"));
+            }
+        } catch (SQLException e) {
+            throw new InvalidSQLException("An error occurred when tyring to get data from to the database.");
+        }
+
+        return user;
     }
 
     public List<String> getAllUsernames() {

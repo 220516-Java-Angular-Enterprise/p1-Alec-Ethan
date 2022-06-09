@@ -78,4 +78,24 @@ public class UsersServlet extends HttpServlet {
             resp.setStatus(500);
         }
     }
+
+    /*
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
+
+        if (requester == null) {
+            resp.setStatus(401); // UNAUTHORIZED
+            return;
+        }
+
+        if (!requester.getRole().equals("ADMIN")) {
+            resp.setStatus(403); // FORBIDDEN
+            return;
+        }
+
+        List<Users> users = userService.getAllUsers();
+        resp.setContentType("application/json");
+        resp.getWriter().write(mapper.writeValueAsString(users));
+    } */
 }
