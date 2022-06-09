@@ -57,13 +57,13 @@ public class UserRolesDAO implements CrudDAO<UserRoles> {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next())
-                rem = new UserRoles();
-                        rem.setId(rs.getString("id"));
-                        rem.setRole(rs.getString("role"));
+                rem = new UserRoles(
+                        rs.getString("id"),
+                        rs.getString("role"));
 
 
         } catch (SQLException e) {
-            throw new InvalidSQLException("An error occurred when tyring to get a Reimbursement Type by ID from the DataBase");
+            throw new InvalidSQLException("An error occurred when trying to get a User Role by ID from the DataBase");
         }
         return rem;
     }

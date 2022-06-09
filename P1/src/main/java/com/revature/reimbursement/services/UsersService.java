@@ -9,6 +9,7 @@ import com.revature.reimbursement.util.customException.InvalidRequestException;
 import com.revature.reimbursement.util.customException.InvalidUserException;
 import com.revature.reimbursement.util.customException.ResourceConflictException;
 
+import javax.naming.AuthenticationException;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,10 +23,17 @@ public class UsersService {
         this.usersDAO = usersDAO;
     }
 
-    public Users login(NewLoginRequest newLogin) {
+    public Users login(NewLoginRequest request) throws Exception {
         /* List<User> users = new ArrayList<>() */
         /* users = userDAO.getAll() */
 
+        Users user = new Users();
+        if (!isValidUsername(request.getUsername()) || !isValidPassword(request.getPassword())) throw new InvalidRequestException("Invalid username or password");
+        user = usersDAO.getUserByUsernameAndPassword(request.getUsername(), request.getPassword());
+        if (user == null) throw new Exception("Invalid credentials provided!");
+        return user;
+
+        /*
         String username = newLogin.getUsername();
         String password = newLogin.getPassword();
 
@@ -46,7 +54,7 @@ public class UsersService {
             }
         }
 
-        return isValidCredentials(user);
+        return isValidCredentials(user); */
     }
 
     public Users register(NewUserRequest request) {
@@ -99,6 +107,10 @@ public class UsersService {
     }
     public List<Users> getAllRowsByColumnValue(String column, String value) {
         return usersDAO.getAllRowsByColumnValue(column, value);
+    }
+
+    public List<Users> getAllUsers() {
+        return usersDAO.getAll();
     }
 
 }

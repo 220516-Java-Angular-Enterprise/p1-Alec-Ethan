@@ -5,7 +5,7 @@ import com.revature.reimbursement.models.Users;
 public class Principal {
     private String id;
     private String username;
-    private String role;
+    private String role_id;
 
     public Principal() {
         super();
@@ -14,13 +14,13 @@ public class Principal {
     public Principal(Users user) {
         this.id = user.getId();
         this.username = user.getUsername();
-        this.role = user.getRole_id();
+        this.role_id = user.getRole_id();
     }
 
-    public Principal(String id, String username, String role) {
+    public Principal(String id, String username, String role_id) {
         this.id = id;
         this.username = username;
-        this.role = role;
+        this.role_id = role_id;
     }
 
     //<editor-fold desc="Get/Set">
@@ -42,11 +42,11 @@ public class Principal {
     }
 
     public String getRole() {
-        return role;
+        return role_id;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setRole(String role_id) {
+        this.role_id = role_id;
     }
 
     //</editor-fold>

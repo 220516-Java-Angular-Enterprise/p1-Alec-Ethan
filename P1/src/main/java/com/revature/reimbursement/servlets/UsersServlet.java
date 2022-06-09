@@ -6,6 +6,7 @@ import com.revature.reimbursement.dtos.requests.NewUserRequest;
 import com.revature.reimbursement.dtos.responses.Principal;
 import com.revature.reimbursement.models.Users;
 import com.revature.reimbursement.services.TokenService;
+import com.revature.reimbursement.services.UserRolesService;
 import com.revature.reimbursement.services.UsersService;
 import com.revature.reimbursement.util.annotations.Inject;
 import com.revature.reimbursement.util.customException.InvalidRequestException;
@@ -23,11 +24,13 @@ public class UsersServlet extends HttpServlet {
     @Inject
     private final ObjectMapper mapper;
     private final UsersService userService;
+    private final UserRolesService userRolesService;
     private final TokenService tokenService;
     @Inject
-    public UsersServlet(ObjectMapper mapper, UsersService userService, TokenService tokenService) {
+    public UsersServlet(ObjectMapper mapper, UsersService userService, UserRolesService userRolesService, TokenService tokenService) {
         this.mapper = mapper;
         this.userService = userService;
+        this.userRolesService = userRolesService;
         this.tokenService = tokenService;
     }
 
@@ -79,23 +82,33 @@ public class UsersServlet extends HttpServlet {
         }
     }
 
-    /*
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
+        try {
+            Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
 
-        if (requester == null) {
-            resp.setStatus(401); // UNAUTHORIZED
-            return;
+            if (requester == null) {
+                resp.setStatus(401); // UNAUTHORIZED
+                return;
+            }
+
+            if (!userRolesService.getById(requester.getRole()).getRole().equals("ADMIN")) {
+                resp.setStatus(403); // FORBIDDEN
+                return;
+            }
+
+            List<Users> users = userService.getAllUsers();
+            resp.setContentType("application/json");
+            resp.getWriter().write(mapper.writeValueAsString(users));
+        } catch (InvalidRequestException e) {
+        resp.setStatus(404); // BAD REQUEST
+        e.printStackTrace();
+        } catch (ResourceConflictException e) {
+        resp.setStatus(409); // RESOURCE CONFLICT
+        } catch (Exception e) {
+        e.printStackTrace();
+        resp.setStatus(500);
         }
-
-        if (!requester.getRole().equals("ADMIN")) {
-            resp.setStatus(403); // FORBIDDEN
-            return;
-        }
-
-        List<Users> users = userService.getAllUsers();
-        resp.setContentType("application/json");
-        resp.getWriter().write(mapper.writeValueAsString(users));
-    } */
+    }
 }
