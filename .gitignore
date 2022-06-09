@@ -66,3 +66,5 @@ yarn.lock
 .idea  
 libraries  
 P1/src/main/resources/db.properties
+P1/src/main/java/com/revature/reimbursement/util/database/DatabaseConnection.java
+P1/src/main/java/com/revature/reimbursement/util/database/DatabaseConnection.java

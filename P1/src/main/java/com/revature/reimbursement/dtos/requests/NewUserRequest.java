@@ -22,6 +22,11 @@ public class NewUserRequest {
         this.is_active = is_active;
     }
 
+    public NewUserRequest(String id, String username){
+        this.id = id;
+        this.username = username;
+    }
+
 
     //Change Role ID to getRoleByID!!!!!
     public Users extractUser() {

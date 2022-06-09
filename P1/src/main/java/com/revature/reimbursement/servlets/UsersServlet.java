@@ -27,6 +27,7 @@ public class UsersServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        //resp.getWriter().write("<h1>/test works!</h1>");
         try {
             NewUserRequest request = mapper.readValue(req.getInputStream(), NewUserRequest.class);
             Users createdUser = userService.register(request);
@@ -35,6 +36,7 @@ public class UsersServlet extends HttpServlet {
             resp.getWriter().write(mapper.writeValueAsString(createdUser.getId()));
         } catch (InvalidRequestException e) {
             resp.setStatus(404); // BAD REQUEST
+            e.printStackTrace();
         } catch (ResourceConflictException e) {
             resp.setStatus(409); // RESOURCE CONFLICT
         } catch (Exception e) {

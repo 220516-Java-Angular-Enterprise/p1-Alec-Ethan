@@ -63,6 +63,8 @@
                         <server>LocalTomcat</server>
                         <path>/test-app</path>
                         <update>true</update>
+                        <username>admin</username>
+                        <password>revature</password>
                     </configuration>
                 </plugin>
             </plugins>
