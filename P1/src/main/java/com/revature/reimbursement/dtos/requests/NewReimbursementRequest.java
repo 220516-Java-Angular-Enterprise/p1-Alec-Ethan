@@ -38,6 +38,9 @@ public class NewReimbursementRequest {
         this.type_id = type_id;
     }
 
+    public NewReimbursementRequest() {}
+
+
     public Reimbursements extractReimbursement() {return new Reimbursements( amount, submitted, description, author_id, status_id, type_id); }
 
     //<editor-fold desc = "Get/Set">

@@ -1,8 +1,11 @@
 package com.revature.reimbursement.servlets;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.revature.reimbursement.dtos.requests.NewReimbursementRequest;
+import com.revature.reimbursement.dtos.requests.NewUserRequest;
 import com.revature.reimbursement.dtos.responses.Principal;
 import com.revature.reimbursement.models.Reimbursements;
+import com.revature.reimbursement.models.Users;
 import com.revature.reimbursement.services.ReimbursementsService;
 import com.revature.reimbursement.services.TokenService;
 import com.revature.reimbursement.services.UserRolesService;
@@ -16,6 +19,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
 
 public class ReimbursementServlet extends HttpServlet {
@@ -76,8 +81,31 @@ public class ReimbursementServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
+            //Only Employees should be able to create a new reimbursement
+            NewReimbursementRequest reimbursementRequest = mapper.readValue(req.getInputStream(), NewReimbursementRequest.class);
+            Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
+            String role = userRolesService.getById(requester.getRole()).getRole();
+            reimbursementRequest.setSubmitted(Timestamp.from(Instant.now()));
+            reimbursementRequest.setAuthor_id(requester.getId());
+            reimbursementRequest.setStatus_id("0");
+            String[] uris = req.getRequestURI().split("/");
+
+            //Checks the URI to see what page they are on
+            //Modify the Reimbursement:
+            //Employees can update if their reimbursement is still PENDING.
+            //FINANCE MANAGERS can change the reimbursement status
 
 
+            //Filter the Reimbursement: (FINANCE MANAGER)
+
+
+            //Create a Reimbursement: (EMPLOYEE)
+            if (role.equals("EMPLOYEE")) {
+                Reimbursements createdRem = reimbursementsService.saveReimbursement(reimbursementRequest);
+                resp.setStatus(201); // CREATED
+                resp.setContentType("application/json");
+                resp.getWriter().write(mapper.writeValueAsString(createdRem.getId()));
+            }
         } catch (InvalidRequestException e) {
             resp.setStatus(404); // BAD REQUEST
             e.printStackTrace();

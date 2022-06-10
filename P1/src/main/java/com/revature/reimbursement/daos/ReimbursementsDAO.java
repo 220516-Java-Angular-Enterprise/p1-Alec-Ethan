@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 public class ReimbursementsDAO implements CrudDAO<Reimbursements> {
 
@@ -18,6 +19,7 @@ public class ReimbursementsDAO implements CrudDAO<Reimbursements> {
 
     @Override
     public void save(Reimbursements obj) {
+        obj.setId(UUID.randomUUID().toString());
         try (Connection con = ConnectionFactory.getInstance().getConnection()){
             PreparedStatement ps = con.prepareStatement("INSERT INTO reimbursements (id, amount, submitted, resolved, " +
                     "description, receipt, payment_id, author_id, resolver_id, status_id, type_id) " +
@@ -27,7 +29,7 @@ public class ReimbursementsDAO implements CrudDAO<Reimbursements> {
             ps.setTimestamp(3, obj.getSubmitted());
             ps.setTimestamp(4, obj.getResolved());
             ps.setString(5, obj.getDescription());
-            ps.setBlob(6, obj.getReceipt());
+            ps.setBytes(6, null);
             ps.setString(7, obj.getPayment_id());
             ps.setString(8, obj.getAuthor_id());
             ps.setString(9, obj.getResolver_id());
@@ -35,6 +37,7 @@ public class ReimbursementsDAO implements CrudDAO<Reimbursements> {
             ps.setString(11, obj.getType_id());
             ps.executeUpdate();
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new InvalidSQLException("An error occurred when trying to save a new reimbursement to the Data Base.");
         }
     }
