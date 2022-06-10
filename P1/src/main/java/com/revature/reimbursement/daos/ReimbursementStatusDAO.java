@@ -4,7 +4,6 @@ import com.revature.reimbursement.models.ReimbursementStatus;
 import com.revature.reimbursement.models.Reimbursements;
 import com.revature.reimbursement.util.customException.InvalidSQLException;
 import com.revature.reimbursement.util.database.ConnectionFactory;
-import com.revature.reimbursement.util.database.DatabaseConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -88,9 +87,9 @@ public class ReimbursementStatusDAO implements CrudDAO<ReimbursementStatus> {
     @Override
     public ReimbursementStatus getRowByColumnValue(String column, String input){
         ReimbursementStatus row = new ReimbursementStatus();
-        try {
+        try (Connection con = ConnectionFactory.getInstance().getConnection()){
 
-            PreparedStatement ps = DatabaseConnection.getCon().prepareStatement("SELECT * FROM reimbursement_statuses WHERE " + column + " = " + input);
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM reimbursement_statuses WHERE " + column + " = " + input);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next())  {

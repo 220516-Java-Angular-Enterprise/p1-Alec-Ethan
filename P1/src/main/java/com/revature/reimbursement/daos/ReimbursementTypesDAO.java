@@ -4,7 +4,6 @@ import com.revature.reimbursement.models.ReimbursementStatus;
 import com.revature.reimbursement.models.ReimbursementTypes;
 import com.revature.reimbursement.util.customException.InvalidSQLException;
 import com.revature.reimbursement.util.database.ConnectionFactory;
-import com.revature.reimbursement.util.database.DatabaseConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -92,7 +91,7 @@ public class ReimbursementTypesDAO implements CrudDAO<ReimbursementTypes> {
         ReimbursementTypes row = new ReimbursementTypes();
         try (Connection con = ConnectionFactory.getInstance().getConnection()){
 
-            PreparedStatement ps = DatabaseConnection.getCon().prepareStatement("SELECT * FROM reimbursement_types WHERE " + column + " = " + input);
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM reimbursement_types WHERE " + column + " = " + input);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next())  {

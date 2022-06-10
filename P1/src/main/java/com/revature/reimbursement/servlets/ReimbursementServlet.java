@@ -10,7 +10,6 @@ import com.revature.reimbursement.services.UsersService;
 import com.revature.reimbursement.util.annotations.Inject;
 import com.revature.reimbursement.util.customException.InvalidRequestException;
 import com.revature.reimbursement.util.customException.ResourceConflictException;
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -57,7 +56,7 @@ public class ReimbursementServlet extends HttpServlet {
             }
             else if (role.equals("EMPLOYEE")) {
                 //Display all Reimbursements by Author ID
-                List<Reimbursements> rems = reimbursementsService.getAllRowsByColumnValue("author_id", requester.getId());
+                List<Reimbursements> rems = reimbursementsService.getAllByAuthorID(requester.getId());
                 resp.setContentType("application/json");
                 resp.getWriter().write(mapper.writeValueAsString(rems));
             }
