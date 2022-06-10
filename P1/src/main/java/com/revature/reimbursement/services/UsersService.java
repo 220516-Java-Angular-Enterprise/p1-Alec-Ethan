@@ -80,6 +80,10 @@ public class UsersService {
     public Users getById(String id) { return usersDAO.getById(id); }
     public List<Users> getAll() { return usersDAO.getAll(); }
 
+    public void deleteUserByUsername(String username){
+        String id = getRowByColumnValue("username", username).getId();
+        usersDAO.delete(id);
+    }
 
     private boolean isValidUsername(String username) {
         return username.matches("^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$");
@@ -113,4 +117,11 @@ public class UsersService {
         return usersDAO.getAll();
     }
 
+    public void saveUser(Users currentUser) {
+        usersDAO.save(currentUser);
+    }
+
+    public void updateUser(Users currentUser, boolean isPasswordChanged) {
+        usersDAO.update(currentUser, isPasswordChanged);
+    }
 }

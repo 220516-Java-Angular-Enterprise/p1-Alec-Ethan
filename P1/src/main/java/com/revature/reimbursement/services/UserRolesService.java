@@ -32,5 +32,9 @@ public class UserRolesService {
         return userRolesDAO.getAllRowsByColumnValue(column, value);
     }
 
+    public boolean getExistsInColumnByStringValue(String column, String value){
+        return userRolesDAO.getExistsInColumnByString(column, value);
+    }
+
 
 }
