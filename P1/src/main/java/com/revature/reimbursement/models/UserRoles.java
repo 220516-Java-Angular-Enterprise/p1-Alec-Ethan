@@ -5,6 +5,12 @@ public class UserRoles {
     String id;
     String role;
 
+    public UserRoles(String id, String role) {
+        this.id = id;
+        this.role = role;
+    }
+
+    public UserRoles() {}
     //<editor-fold desc="Get/Set">
 
     public String getId() {
@@ -22,7 +28,6 @@ public class UserRoles {
     public void setRole(String role) {
         this.role = role;
     }
-
     //</editor-fold>
 
 }

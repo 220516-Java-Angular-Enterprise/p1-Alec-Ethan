@@ -1,11 +1,25 @@
-package com.revature.reimbursement.models;
+package com.revature.reimbursement.dtos.requests;
 
-public class Users {
-    private String id, username, email, password, given_name, surname, role_id;
+
+
+public class UserModificationRequest {
+    private String requestType; //UPDATE,DELETE, GETINFO
+    private String username; //how to find user.
+    //When value == "" skip.
+    private String email, password, given_name, surname, role_id;
     private boolean is_active;
 
-    public Users(String id, String username, String email, String password, String given_name, String surname, String role_id, boolean is_active) {
-        this.id = id;
+    public UserModificationRequest() {
+        super();
+    }
+
+    public UserModificationRequest(String requestType, String username){
+        this.requestType = requestType;
+        this.username = username;
+    }
+
+    public UserModificationRequest(String requestType, String username, String email, String password, String given_name, String surname, String role_id, boolean is_active){
+        this.requestType = requestType;
         this.username = username;
         this.email = email;
         this.password = password;
@@ -15,27 +29,14 @@ public class Users {
         this.is_active = is_active;
     }
 
-    public Users(String username, String email, String password, String given_name, String surname, String role_id) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.given_name = given_name;
-        this.surname = surname;
-        this.role_id = role_id;
+    //<editor-fold desc = "Get/Set">
+
+    public String getRequestType() {
+        return requestType;
     }
 
-    public Users() {
-
-    }
-
-    //<editor-fold desc="Get/Set">
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
+    public void setRequestType(String requestType) {
+        this.requestType = requestType;
     }
 
     public String getUsername() {
@@ -78,20 +79,20 @@ public class Users {
         this.surname = surname;
     }
 
-    public boolean isIs_active() {
-        return is_active;
-    }
-
-    public void setIs_active(boolean is_active) {
-        this.is_active = is_active;
-    }
-
     public String getRole_id() {
         return role_id;
     }
 
     public void setRole_id(String role_id) {
         this.role_id = role_id;
+    }
+
+    public boolean isIs_active() {
+        return is_active;
+    }
+
+    public void setIs_active(boolean is_active) {
+        this.is_active = is_active;
     }
 
     //</editor-fold>

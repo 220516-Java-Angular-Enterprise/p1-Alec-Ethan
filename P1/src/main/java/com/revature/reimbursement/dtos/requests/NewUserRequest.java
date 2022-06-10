@@ -1,10 +1,17 @@
-package com.revature.reimbursement.models;
+package com.revature.reimbursement.dtos.requests;
 
-public class Users {
+import com.revature.reimbursement.models.Users;
+
+public class NewUserRequest {
+
     private String id, username, email, password, given_name, surname, role_id;
     private boolean is_active;
 
-    public Users(String id, String username, String email, String password, String given_name, String surname, String role_id, boolean is_active) {
+    public NewUserRequest() {
+        super();
+    }
+
+    public NewUserRequest(String id, String username, String email, String password, String given_name, String surname, String role_id, boolean is_active) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -15,21 +22,18 @@ public class Users {
         this.is_active = is_active;
     }
 
-    public Users(String username, String email, String password, String given_name, String surname, String role_id) {
+    public NewUserRequest(String id, String username){
+        this.id = id;
         this.username = username;
-        this.email = email;
-        this.password = password;
-        this.given_name = given_name;
-        this.surname = surname;
-        this.role_id = role_id;
     }
 
-    public Users() {
 
+    //Change Role ID to getRoleByID!!!!!
+    public Users extractUser() {
+        return new Users(username, email, password, given_name, surname, role_id);
     }
 
-    //<editor-fold desc="Get/Set">
-
+//<editor-fold desc = Get/Set>
     public String getId() {
         return id;
     }
@@ -78,14 +82,6 @@ public class Users {
         this.surname = surname;
     }
 
-    public boolean isIs_active() {
-        return is_active;
-    }
-
-    public void setIs_active(boolean is_active) {
-        this.is_active = is_active;
-    }
-
     public String getRole_id() {
         return role_id;
     }
@@ -94,6 +90,26 @@ public class Users {
         this.role_id = role_id;
     }
 
+    public boolean isIs_active() {
+        return is_active;
+    }
+
+    public void setIs_active(boolean is_active) {
+        this.is_active = is_active;
+    }
     //</editor-fold>
 
+    @Override
+    public String toString() {
+        return "NewUserRequest{" +
+                "id='" + id + '\'' +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", given_name='" + given_name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", role_id='" + role_id + '\'' +
+                ", is_active=" + is_active +
+                '}';
+    }
 }
