@@ -29,4 +29,5 @@ public class ReimbursementStatusService {
     public List<ReimbursementStatus> getAllRowsByColumnValue(String column, String value) {
         return ReimbursementStatusDAO.getAllRowsByColumnValue(column, value);
     }
+    public String getIdByStatus(String status) { return ReimbursementStatusDAO.getIdByStatus(status); }
 }

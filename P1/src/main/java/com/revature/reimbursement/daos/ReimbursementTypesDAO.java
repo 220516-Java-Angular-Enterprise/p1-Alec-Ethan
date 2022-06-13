@@ -4,7 +4,6 @@ import com.revature.reimbursement.models.ReimbursementStatus;
 import com.revature.reimbursement.models.ReimbursementTypes;
 import com.revature.reimbursement.util.customException.InvalidSQLException;
 import com.revature.reimbursement.util.database.ConnectionFactory;
-import com.revature.reimbursement.util.database.DatabaseConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -68,6 +67,23 @@ public class ReimbursementTypesDAO implements CrudDAO<ReimbursementTypes> {
         return rem;
     }
 
+    public String getIdByType(String name) {
+        String id = "";
+
+        try (Connection con = ConnectionFactory.getInstance().getConnection()){
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM reimbursement_types WHERE type = ?");
+            ps.setString(1, name);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next())
+                id = rs.getString("id");
+
+        } catch (SQLException e) {
+            throw new InvalidSQLException("An error occurred when tyring to get a Reimbursement Status by ID from the DataBase");
+        }
+        return id;
+    }
+
     @Override
     public List<ReimbursementTypes> getAll() {
         List<ReimbursementTypes> rems = new ArrayList<>();
@@ -92,7 +108,7 @@ public class ReimbursementTypesDAO implements CrudDAO<ReimbursementTypes> {
         ReimbursementTypes row = new ReimbursementTypes();
         try (Connection con = ConnectionFactory.getInstance().getConnection()){
 
-            PreparedStatement ps = DatabaseConnection.getCon().prepareStatement("SELECT * FROM reimbursement_types WHERE " + column + " = " + input);
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM reimbursement_types WHERE " + column + " = " + input);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next())  {
