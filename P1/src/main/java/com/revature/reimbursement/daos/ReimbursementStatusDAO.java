@@ -65,6 +65,23 @@ public class ReimbursementStatusDAO implements CrudDAO<ReimbursementStatus> {
         return rem;
     }
 
+    public String getIdByStatus(String name) {
+        String id = "";
+
+        try (Connection con = ConnectionFactory.getInstance().getConnection()){
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM reimbursement_statuses WHERE status = ?");
+            ps.setString(1, name);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next())
+               id = rs.getString("id");
+
+        } catch (SQLException e) {
+            throw new InvalidSQLException("An error occurred when tyring to get a Reimbursement Status by ID from the DataBase");
+        }
+        return id;
+    }
+
     @Override
     public List<ReimbursementStatus> getAll() {
         List<ReimbursementStatus> rems = new ArrayList<>();

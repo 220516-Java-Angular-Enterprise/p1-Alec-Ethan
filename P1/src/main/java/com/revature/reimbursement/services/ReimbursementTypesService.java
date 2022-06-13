@@ -29,4 +29,6 @@ public class ReimbursementTypesService {
     public List<ReimbursementTypes> getAllRowsByColumnValue(String column, String value) {
         return ReimbursementTypesDAO.getAllRowsByColumnValue(column, value);
     }
+    public String getIdByType(String type) { return ReimbursementTypesDAO.getIdByType(type); }
+
 }
