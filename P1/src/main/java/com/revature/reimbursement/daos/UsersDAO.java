@@ -34,10 +34,42 @@ public class UsersDAO implements CrudDAO<Users> {
         }
     }
 
+    //DO NOT USE!
     @Override
     public void update(Users obj) {
-        delete(obj.getId());
-        save(obj);
+        throw new RuntimeException("Method not implemented... Use the update method with 2 arguments!");
+    }
+
+    //@Override
+    public void update(Users obj, boolean isPasswordChanged) {
+        if (isPasswordChanged)
+            save(obj);
+        else{
+            try (Connection con = ConnectionFactory.getInstance().getConnection()){
+                PreparedStatement ps = con.prepareStatement("UPDATE users " +
+                        "SET id = ?, " +
+                        "username = ?," +
+                        "email = ?," +
+                        "given_name = ?," +
+                        "surname = ?," +
+                        "is_active = ?," +
+                        "role_id = ?" +
+                        "WHERE id = '" + obj.getId() + "'");
+
+
+                ps.setString(1, obj.getId());
+                ps.setString(2, obj.getUsername());
+                ps.setString(3, obj.getEmail());
+                ps.setString(4, obj.getGiven_name());
+                ps.setString(5, obj.getSurname());
+                ps.setBoolean(6, obj.isIs_active());
+                ps.setString(7, obj.getRole_id());
+                ps.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw new InvalidSQLException("An error occurred when trying to save a new Users type to the Data Base.");
+            }
+        }
     }
 
     @Override

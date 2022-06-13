@@ -27,6 +27,8 @@ public class ContextLoaderListener implements ServletContextListener {
 
         /* Need ServletContext class to map whatever servlet to url path. */
         ServletContext context = sce.getServletContext();
+
+        //User Related:
         context.addServlet("UsersServlet", userServlet).addMapping("/users/*");
         context.addServlet("LoginServlet", loginServlet).addMapping("/login/*");
         context.addServlet("ReimbursementServlet", reimbursementServlet).addMapping("/reimbursements/*");

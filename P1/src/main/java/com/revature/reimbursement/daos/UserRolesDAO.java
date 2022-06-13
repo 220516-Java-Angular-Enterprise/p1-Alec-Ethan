@@ -124,4 +124,32 @@ public class UserRolesDAO implements CrudDAO<UserRoles> {
         }
         return rems;
     }
+
+
+    public boolean getExistsInColumnByString(String column, String input) {
+
+        try {
+
+            PreparedStatement ps = DatabaseConnection.getCon().prepareStatement("SELECT " + column + " FROM user_roles WHERE " + column + " = '" + input + "'");
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next())  {
+                String val = rs.getString(column);
+                //System.out.println(val);
+                rs.close();
+                ps.close();
+                return true;
+                //System.out.print("Column 1 returned ");
+                //System.out.println(rs.getString(1));
+            }
+
+        } catch (SQLException e) {
+            System.out.println("FAILed to see if exists!!");
+            //throw new RuntimeException("An error occurred when trying to access the file.");
+        }
+
+        return false;
+    }
+
+
 }
