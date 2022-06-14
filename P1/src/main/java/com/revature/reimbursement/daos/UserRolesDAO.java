@@ -128,9 +128,8 @@ public class UserRolesDAO implements CrudDAO<UserRoles> {
 
     public boolean getExistsInColumnByString(String column, String input) {
 
-        try {
-
-            PreparedStatement ps = DatabaseConnection.getCon().prepareStatement("SELECT " + column + " FROM user_roles WHERE " + column + " = '" + input + "'");
+        try (Connection con = ConnectionFactory.getInstance().getConnection()){
+            PreparedStatement ps = con.prepareStatement("SELECT " + column + " FROM user_roles WHERE " + column + " = '" + input + "'");
             ResultSet rs = ps.executeQuery();
 
             while (rs.next())  {

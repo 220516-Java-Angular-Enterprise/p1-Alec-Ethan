@@ -12,9 +12,9 @@ public class ReimbursementUpdateRequest {
     private Timestamp submitted, resolved;
     private String description;
     private Blob receipt;
-    private String payment_id, author_id, resolver_id, status_id, type_id;
+    private String payment_id, author_id, resolver_id, status_id, type;
 
-    public ReimbursementUpdateRequest(String id, Double amount, Timestamp submitted, Timestamp resolved, String description, Blob receipt, String payment_id, String author_id, String resolver_id, String status_id, String type_id) {
+    public ReimbursementUpdateRequest(String id, Double amount, Timestamp submitted, Timestamp resolved, String description, Blob receipt, String payment_id, String author_id, String resolver_id, String status_id, String type) {
         this.id = id;
         this.amount = amount;
         this.submitted = submitted;
@@ -25,23 +25,23 @@ public class ReimbursementUpdateRequest {
         this.author_id = author_id;
         this.resolver_id = resolver_id;
         this.status_id = status_id;
-        this.type_id = type_id;
+        this.type = type;
     }
 
     //Not Null Constructor
-    public ReimbursementUpdateRequest(Double amount, Timestamp submitted, String description, String author_id, String status_id, String type_id) {
+    public ReimbursementUpdateRequest(Double amount, Timestamp submitted, String description, String author_id, String status_id, String type) {
         this.amount = amount;
         this.submitted = submitted;
         this.description = description;
         this.author_id = author_id;
         this.status_id = status_id;
-        this.type_id = type_id;
+        this.type = type;
     }
 
     public ReimbursementUpdateRequest() {}
 
 
-    public Reimbursements extractReimbursement() {return new Reimbursements( amount, submitted, description, author_id, status_id, type_id); }
+    public Reimbursements extractReimbursement() {return new Reimbursements( amount, submitted, description, author_id, status_id, type); }
 
     //<editor-fold desc = "Get/Set">
 
@@ -125,12 +125,12 @@ public class ReimbursementUpdateRequest {
         this.status_id = status_id;
     }
 
-    public String getType_id() {
-        return type_id;
+    public String getType(){
+        return type;
     }
 
-    public void setType_id(String type_id) {
-        this.type_id = type_id;
+    public void setType(String type_id) {
+        this.type = type_id;
     }
 
 
@@ -150,7 +150,7 @@ public class ReimbursementUpdateRequest {
                 ", author_id='" + author_id + '\'' +
                 ", resolver_id='" + resolver_id + '\'' +
                 ", status_id='" + status_id + '\'' +
-                ", type_id='" + type_id + '\'' +
+                ", type_id='" + type + '\'' +
                 '}';
     }
 }

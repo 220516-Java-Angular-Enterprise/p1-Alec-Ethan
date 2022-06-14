@@ -220,11 +220,15 @@ public class ReimbursementServlet extends HttpServlet {
                     // The Finance Manager should only change the status of the reimbursement
                     // The Resolver_ID should be updated.
                     StatusChangeRequest statusChangeRequest = mapper.readValue(req.getInputStream(), StatusChangeRequest.class);
-                    Reimbursements rem = reimbursementsService.getById(statusChangeRequest.getRem_id());
-                    rem.setStatus_id(reimbursementStatusService.getIdByStatus(statusChangeRequest.getStatus()));
+                    statusChangeRequest.setStatus_id(reimbursementStatusService.getIdByStatus(statusChangeRequest.getStatus()));
+                    statusChangeRequest.setResolver_id(requester.getId());
+                    statusChangeRequest.setResolved(Timestamp.from(Instant.now()));
+                    reimbursementsService.updateReimbursementStatus(statusChangeRequest);
+
+                    /*rem.setStatus_id(reimbursementStatusService.getIdByStatus(statusChangeRequest.getStatus()));
                     rem.setResolver_id(requester.getId());
                     rem.setResolved(Timestamp.from(Instant.now()));
-                    reimbursementsService.updateReimbursement(rem);
+                    reimbursementsService.updateReimbursement(rem);*/
 
                 } else if (role.equals("EMPLOYEE")) {
                     // Update Reimbursement
@@ -232,7 +236,16 @@ public class ReimbursementServlet extends HttpServlet {
                     // the vars that they want to alter from their original reimbursement?
                     NewReimbursementRequest reimbursementUpdateRequest = mapper.readValue(req.getInputStream(), NewReimbursementRequest.class);
                     Reimbursements rem = reimbursementsService.getById(reimbursementUpdateRequest.getId());
-                    rem.setSubmitted(Timestamp.from(Instant.now()));
+                    reimbursementUpdateRequest.setSubmitted(Timestamp.from(Instant.now()));
+                    if (reimbursementUpdateRequest.getAmount() == null)
+                        reimbursementUpdateRequest.setAmount(rem.getAmount());
+                    if (reimbursementUpdateRequest.getDescription() == null)
+                        reimbursementUpdateRequest.setDescription(rem.getDescription());
+                    if (reimbursementUpdateRequest.getType() == null)
+                        reimbursementUpdateRequest.setType(reimbursementTypesService.getTypeById(rem.getType_id()));
+
+                    reimbursementsService.updateReimbursement(reimbursementUpdateRequest);
+                    /*rem.setSubmitted(Timestamp.from(Instant.now()));
                     if (reimbursementUpdateRequest.getAmount() != null)
                         rem.setAmount(reimbursementUpdateRequest.getAmount());
                     if (reimbursementUpdateRequest.getDescription() != null)
@@ -240,7 +253,7 @@ public class ReimbursementServlet extends HttpServlet {
                     if (reimbursementUpdateRequest.getType() != null)
                         rem.setType_id(reimbursementTypesService.getIdByType(reimbursementUpdateRequest.getType()));
 
-                    reimbursementsService.updateReimbursement(rem);
+                    reimbursementsService.updateReimbursement(rem);*/
                 }
             }
         } catch (InvalidRequestException e) {
