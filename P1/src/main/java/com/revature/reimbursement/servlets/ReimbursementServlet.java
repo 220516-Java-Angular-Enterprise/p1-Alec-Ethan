@@ -53,10 +53,19 @@ public class ReimbursementServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
             Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
-            String role = userRolesService.getById(requester.getRole()).getRole();
-            String[] uris = req.getRequestURI().split("/");
+
+            //UNAUTHORIZED
             if (requester == null) {
                 resp.setStatus(401); // UNAUTHORIZED
+                return;
+            }
+
+
+            String role = userRolesService.getById(requester.getRole()).getRole();
+            String[] uris = req.getRequestURI().split("/");
+            //USER IS AN ADMIN
+            if (!role.equals("ADMIN")) {
+                resp.setStatus(403); // FORBIDDEN
                 return;
             }
 
@@ -141,8 +150,20 @@ public class ReimbursementServlet extends HttpServlet {
         try {
             //Only Employees should be able to create a new reimbursement
             Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
+
+            //UNAUTHORIZED
+            if (requester == null) {
+                resp.setStatus(401); // UNAUTHORIZED
+                return;
+            }
+
             String role = userRolesService.getById(requester.getRole()).getRole();
             String[] uris = req.getRequestURI().split("/");
+            //USER IS AN ADMIN
+            if (!role.equals("ADMIN")) {
+                resp.setStatus(403); // FORBIDDEN
+                return;
+            }
 
                 //Create a Reimbursement: (EMPLOYEE)
             if (role.equals("EMPLOYEE")) {
@@ -174,8 +195,20 @@ public class ReimbursementServlet extends HttpServlet {
         try {
             //Only Employees should be able to create a new reimbursement
             Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
+
+            //UNAUTHORIZED
+            if (requester == null) {
+                resp.setStatus(401); // UNAUTHORIZED
+                return;
+            }
+
             String role = userRolesService.getById(requester.getRole()).getRole();
             String[] uris = req.getRequestURI().split("/");
+            //USER IS AN ADMIN
+            if (!role.equals("ADMIN")) {
+                resp.setStatus(403); // FORBIDDEN
+                return;
+            }
 
             //Checks the URI to see what page they are on
             //Modify the Reimbursement:
