@@ -1,13 +1,10 @@
 package com.revature.reimbursement.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.revature.reimbursement.daos.UserRolesDAO;
-import com.revature.reimbursement.daos.UsersDAO;
-import com.revature.reimbursement.services.TokenService;
-import com.revature.reimbursement.services.UserRolesService;
-import com.revature.reimbursement.services.UsersService;
+import com.revature.reimbursement.daos.*;
+import com.revature.reimbursement.services.*;
 import com.revature.reimbursement.servlets.LoginServlet;
-import com.revature.reimbursement.servlets.UserModificationServlet;
+import com.revature.reimbursement.servlets.ReimbursementServlet;
 import com.revature.reimbursement.servlets.UsersServlet;
 
 import jakarta.servlet.ServletContext;
@@ -26,7 +23,7 @@ public class ContextLoaderListener implements ServletContextListener {
         /* Dependency injection. */
         UsersServlet userServlet = new UsersServlet(mapper, new UsersService(new UsersDAO()), new UserRolesService(new UserRolesDAO()), new TokenService(new JwtConfig()));
         LoginServlet loginServlet = new LoginServlet(mapper, new UsersService(new UsersDAO()), new TokenService(new JwtConfig()));
-        UserModificationServlet userModificationServlet = new UserModificationServlet(mapper, new UsersService(new UsersDAO()), new UserRolesService(new UserRolesDAO()), new TokenService(new JwtConfig()));
+        ReimbursementServlet reimbursementServlet = new ReimbursementServlet(mapper, new UsersService(new UsersDAO()), new UserRolesService(new UserRolesDAO()), new TokenService(new JwtConfig()), new ReimbursementsService(new ReimbursementsDAO()), new ReimbursementStatusService(new ReimbursementStatusDAO()), new ReimbursementTypesService(new ReimbursementTypesDAO()));
 
         /* Need ServletContext class to map whatever servlet to url path. */
         ServletContext context = sce.getServletContext();
@@ -34,10 +31,7 @@ public class ContextLoaderListener implements ServletContextListener {
         //User Related:
         context.addServlet("UsersServlet", userServlet).addMapping("/users/*");
         context.addServlet("LoginServlet", loginServlet).addMapping("/login/*");
-
-        //Admin Related:
-        context.addServlet("UserModificationServlet", userModificationServlet).addMapping("/user-modification/*");
-
+        context.addServlet("ReimbursementServlet", reimbursementServlet).addMapping("/reimbursements/*");
     }
 
     @Override

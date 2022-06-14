@@ -78,7 +78,7 @@
                     <configuration>
                         <url>http://localhost:8080/manager/text</url>
                         <server>LocalTomcat</server>
-                        <path>/reimbursements</path>
+                        <path>/p1</path>
                         <update>true</update>
                         <username>admin</username>
                         <password>revature</password>

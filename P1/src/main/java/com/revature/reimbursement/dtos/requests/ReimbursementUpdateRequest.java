@@ -1,9 +1,11 @@
-package com.revature.reimbursement.models;
+package com.revature.reimbursement.dtos.requests;
+
+import com.revature.reimbursement.models.Reimbursements;
 
 import java.sql.Blob;
 import java.sql.Timestamp;
 
-public class Reimbursements {
+public class ReimbursementUpdateRequest {
 
     private String id;
     private Double amount;
@@ -12,7 +14,7 @@ public class Reimbursements {
     private Blob receipt;
     private String payment_id, author_id, resolver_id, status_id, type_id;
 
-    public Reimbursements(String id, Double amount, Timestamp submitted, Timestamp resolved, String description, Blob receipt, String payment_id, String author_id, String resolver_id, String status_id, String type_id) {
+    public ReimbursementUpdateRequest(String id, Double amount, Timestamp submitted, Timestamp resolved, String description, Blob receipt, String payment_id, String author_id, String resolver_id, String status_id, String type_id) {
         this.id = id;
         this.amount = amount;
         this.submitted = submitted;
@@ -25,22 +27,24 @@ public class Reimbursements {
         this.status_id = status_id;
         this.type_id = type_id;
     }
-    public Reimbursements(Double amount, Timestamp submitted, String description, String author_id, String status_id, String type_id) {
+
+    //Not Null Constructor
+    public ReimbursementUpdateRequest(Double amount, Timestamp submitted, String description, String author_id, String status_id, String type_id) {
         this.amount = amount;
         this.submitted = submitted;
-        this.resolved = null;
         this.description = description;
-        this.receipt = null;
-        this.payment_id = null;
         this.author_id = author_id;
-        this.resolver_id = null;
         this.status_id = status_id;
         this.type_id = type_id;
     }
-    public Reimbursements() {}
+
+    public ReimbursementUpdateRequest() {}
 
 
-    //<editor-fold desc="Get/Set">
+    public Reimbursements extractReimbursement() {return new Reimbursements( amount, submitted, description, author_id, status_id, type_id); }
+
+    //<editor-fold desc = "Get/Set">
+
     public String getId() {
         return id;
     }
@@ -128,7 +132,25 @@ public class Reimbursements {
     public void setType_id(String type_id) {
         this.type_id = type_id;
     }
+
+
     //</editor-fold>
 
 
+    @Override
+    public String toString() {
+        return "NewReimbursementRequest{" +
+                "id='" + id + '\'' +
+                ", amount=" + amount +
+                ", submitted=" + submitted +
+                ", resolved=" + resolved +
+                ", description='" + description + '\'' +
+                ", receipt=" + receipt +
+                ", payment_id='" + payment_id + '\'' +
+                ", author_id='" + author_id + '\'' +
+                ", resolver_id='" + resolver_id + '\'' +
+                ", status_id='" + status_id + '\'' +
+                ", type_id='" + type_id + '\'' +
+                '}';
+    }
 }

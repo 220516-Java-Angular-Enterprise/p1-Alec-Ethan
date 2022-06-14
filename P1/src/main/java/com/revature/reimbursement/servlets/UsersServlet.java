@@ -36,7 +36,6 @@ public class UsersServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //resp.getWriter().write("<h1>/test works!</h1>");
         try {
             NewUserRequest userRequest = mapper.readValue(req.getInputStream(), NewUserRequest.class);
             String[] uris = req.getRequestURI().split("/");
