@@ -53,10 +53,19 @@ public class ReimbursementServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
             Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
-            String role = userRolesService.getById(requester.getRole()).getRole();
-            String[] uris = req.getRequestURI().split("/");
+
+            //UNAUTHORIZED
             if (requester == null) {
                 resp.setStatus(401); // UNAUTHORIZED
+                return;
+            }
+
+
+            String role = userRolesService.getById(requester.getRole()).getRole();
+            String[] uris = req.getRequestURI().split("/");
+            //USER IS AN ADMIN
+            if (role.equals("ADMIN")) {
+                resp.setStatus(403); // FORBIDDEN
                 return;
             }
 
@@ -141,8 +150,20 @@ public class ReimbursementServlet extends HttpServlet {
         try {
             //Only Employees should be able to create a new reimbursement
             Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
+
+            //UNAUTHORIZED
+            if (requester == null) {
+                resp.setStatus(401); // UNAUTHORIZED
+                return;
+            }
+
             String role = userRolesService.getById(requester.getRole()).getRole();
             String[] uris = req.getRequestURI().split("/");
+            //USER IS AN ADMIN
+            if (role.equals("ADMIN")) {
+                resp.setStatus(403); // FORBIDDEN
+                return;
+            }
 
                 //Create a Reimbursement: (EMPLOYEE)
             if (role.equals("EMPLOYEE")) {
@@ -151,7 +172,7 @@ public class ReimbursementServlet extends HttpServlet {
                 reimbursementRequest.setSubmitted(Timestamp.from(Instant.now()));
                 reimbursementRequest.setAuthor_id(requester.getId());
                 reimbursementRequest.setStatus_id("0"); // Sets status to PENDING
-                reimbursementRequest.setType(reimbursementTypesService.getIdByType(reimbursementRequest.getType()));
+                reimbursementRequest.setType_id(reimbursementTypesService.getIdByType(reimbursementRequest.getType()));
                 // Add the New Reimbursement:
                 Reimbursements createdRem = reimbursementsService.saveReimbursement(reimbursementRequest);
                 resp.setStatus(201); // CREATED
@@ -174,8 +195,20 @@ public class ReimbursementServlet extends HttpServlet {
         try {
             //Only Employees should be able to create a new reimbursement
             Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
+
+            //UNAUTHORIZED
+            if (requester == null) {
+                resp.setStatus(401); // UNAUTHORIZED
+                return;
+            }
+
             String role = userRolesService.getById(requester.getRole()).getRole();
             String[] uris = req.getRequestURI().split("/");
+            //USER IS AN ADMIN
+            if (role.equals("ADMIN")) {
+                resp.setStatus(403); // FORBIDDEN
+                return;
+            }
 
             //Checks the URI to see what page they are on
             //Modify the Reimbursement:
@@ -187,11 +220,10 @@ public class ReimbursementServlet extends HttpServlet {
                     // The Finance Manager should only change the status of the reimbursement
                     // The Resolver_ID should be updated.
                     StatusChangeRequest statusChangeRequest = mapper.readValue(req.getInputStream(), StatusChangeRequest.class);
-                    Reimbursements rem = reimbursementsService.getById(statusChangeRequest.getRem_id());
-                    rem.setStatus_id(reimbursementStatusService.getIdByStatus(statusChangeRequest.getStatus()));
-                    rem.setResolver_id(requester.getId());
-                    rem.setResolved(Timestamp.from(Instant.now()));
-                    reimbursementsService.updateReimbursement(rem);
+                    statusChangeRequest.setStatus_id(reimbursementStatusService.getIdByStatus(statusChangeRequest.getStatus()));
+                    statusChangeRequest.setResolver_id(requester.getId());
+                    statusChangeRequest.setResolved(Timestamp.from(Instant.now()));
+                    reimbursementsService.updateReimbursementStatus(statusChangeRequest);
 
                 } else if (role.equals("EMPLOYEE")) {
                     // Update Reimbursement
@@ -199,15 +231,15 @@ public class ReimbursementServlet extends HttpServlet {
                     // the vars that they want to alter from their original reimbursement?
                     NewReimbursementRequest reimbursementUpdateRequest = mapper.readValue(req.getInputStream(), NewReimbursementRequest.class);
                     Reimbursements rem = reimbursementsService.getById(reimbursementUpdateRequest.getId());
-                    rem.setSubmitted(Timestamp.from(Instant.now()));
-                    if (reimbursementUpdateRequest.getAmount() != null)
-                        rem.setAmount(reimbursementUpdateRequest.getAmount());
-                    if (reimbursementUpdateRequest.getDescription() != null)
-                        rem.setDescription(reimbursementUpdateRequest.getDescription());
-                    if (reimbursementUpdateRequest.getType() != null)
-                        rem.setType_id(reimbursementTypesService.getIdByType(reimbursementUpdateRequest.getType()));
-
-                    reimbursementsService.updateReimbursement(rem);
+                    reimbursementUpdateRequest.setSubmitted(Timestamp.from(Instant.now()));
+                    if (reimbursementUpdateRequest.getAmount() == null)
+                        reimbursementUpdateRequest.setAmount(rem.getAmount());
+                    if (reimbursementUpdateRequest.getDescription() == null)
+                        reimbursementUpdateRequest.setDescription(rem.getDescription());
+                    if (reimbursementUpdateRequest.getType() == null)
+                        reimbursementUpdateRequest.setType_id(reimbursementTypesService.getTypeById(rem.getType_id()));
+                    else reimbursementUpdateRequest.setType_id(reimbursementTypesService.getIdByType(reimbursementUpdateRequest.getType()));
+                    reimbursementsService.updateReimbursement(reimbursementUpdateRequest);
                 }
             }
         } catch (InvalidRequestException e) {

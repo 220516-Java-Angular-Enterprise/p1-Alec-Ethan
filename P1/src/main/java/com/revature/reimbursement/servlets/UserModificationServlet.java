@@ -57,7 +57,12 @@ public class UserModificationServlet extends HttpServlet {
             //Fullfill request:
             UserModificationRequest request = mapper.readValue(req.getInputStream(), UserModificationRequest.class);
             switch(request.getRequestType()){
-
+                case "DELETE":
+                    deleteUser(request);
+                    break;
+                case "UPDATE":
+                    updateUser(request);
+                    break;
                 case "GETINFO":
                     Users user = getUserInfo(request);
                     resp.setContentType("application/json");

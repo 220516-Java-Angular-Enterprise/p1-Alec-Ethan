@@ -25,6 +25,20 @@ public class Reimbursements {
         this.status_id = status_id;
         this.type_id = type_id;
     }
+    public Reimbursements(String id, Double amount, Timestamp submitted, String description, String author_id, String status_id, String type_id) {
+        this.id = id;
+        this.amount = amount;
+        this.submitted = submitted;
+        this.resolved = null;
+        this.description = description;
+        this.receipt = null;
+        this.payment_id = null;
+        this.author_id = author_id;
+        this.resolver_id = null;
+        this.status_id = status_id;
+        this.type_id = type_id;
+    }
+
     public Reimbursements(Double amount, Timestamp submitted, String description, String author_id, String status_id, String type_id) {
         this.amount = amount;
         this.submitted = submitted;

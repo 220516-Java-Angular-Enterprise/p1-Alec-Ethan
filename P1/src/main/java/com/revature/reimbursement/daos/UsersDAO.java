@@ -11,12 +11,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class UsersDAO implements CrudDAO<Users> {
     //Connection con = DatabaseConnection.getCon();
 
     @Override
     public void save(Users obj) {
+        if (obj.getId() == null)
+            obj.setId(UUID.randomUUID().toString());
         try (Connection con = ConnectionFactory.getInstance().getConnection()){
             PreparedStatement ps = con.prepareStatement("INSERT INTO users (id, username, email, password, given_name, surname, is_active, role_id)" +
                     "VALUES (?, ?, ?,  crypt(?, gen_salt('bf')), ?, ?, ?, ?)");
@@ -42,8 +45,10 @@ public class UsersDAO implements CrudDAO<Users> {
 
     //@Override
     public void update(Users obj, boolean isPasswordChanged) {
-        if (isPasswordChanged)
+        if (isPasswordChanged) {
+            delete(obj.getId());
             save(obj);
+        }
         else{
             try (Connection con = ConnectionFactory.getInstance().getConnection()){
                 PreparedStatement ps = con.prepareStatement("UPDATE users " +

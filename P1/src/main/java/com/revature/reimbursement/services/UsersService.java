@@ -24,8 +24,6 @@ public class UsersService {
     }
 
     public Users login(NewLoginRequest request) throws Exception {
-        /* List<User> users = new ArrayList<>() */
-        /* users = userDAO.getAll() */
 
         Users user = new Users();
         if (!isValidUsername(request.getUsername()) || !isValidPassword(request.getPassword())) throw new InvalidRequestException("Invalid username or password");
@@ -33,28 +31,6 @@ public class UsersService {
         if (user == null) throw new Exception("Invalid credentials provided!");
         return user;
 
-        /*
-        String username = newLogin.getUsername();
-        String password = newLogin.getPassword();
-
-        Users user = new Users();
-        List<Users> users = usersDAO.getAll();
-
-        for (Users u : users) {
-            if (u.getUsername().equals(username)) {
-                user.setId(u.getId());
-                user.setUsername(u.getUsername());
-                if (u.getPassword().equals(password)) {
-                    user.setPassword(u.getPassword());
-                    break;
-                }
-            }
-            if (u.getPassword().equals(password)) {
-                user.setPassword(u.getPassword());
-            }
-        }
-
-        return isValidCredentials(user); */
     }
 
     public Users register(NewUserRequest request) {
@@ -73,16 +49,11 @@ public class UsersService {
         return user;
     }
 
-
-
-    public void saveReimbursement(Users rem) { usersDAO.save(rem); }
-    public void updateReimbursement(Users rem) { usersDAO.update(rem); }
-    public void deleteReimbursement(String id) { usersDAO.delete(id); }
     public Users getById(String id) { return usersDAO.getById(id); }
     public List<Users> getAll() { return usersDAO.getAll(); }
 
     public void deleteUserByUsername(String username){
-        String id = getRowByColumnValue("username", username).getId();
+        String id = getRowByColumnValue("username", "'" + username + "'").getId();
         usersDAO.delete(id);
     }
 

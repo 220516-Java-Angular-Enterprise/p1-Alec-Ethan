@@ -83,7 +83,22 @@ public class ReimbursementTypesDAO implements CrudDAO<ReimbursementTypes> {
         }
         return id;
     }
+    public String getTypeById(String name) {
+        String type = "";
 
+        try (Connection con = ConnectionFactory.getInstance().getConnection()){
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM reimbursement_types WHERE id = ?");
+            ps.setString(1, name);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next())
+                type = rs.getString("type");
+
+        } catch (SQLException e) {
+            throw new InvalidSQLException("An error occurred when tyring to get a Reimbursement Status by ID from the DataBase");
+        }
+        return type;
+    }
     @Override
     public List<ReimbursementTypes> getAll() {
         List<ReimbursementTypes> rems = new ArrayList<>();

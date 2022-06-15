@@ -19,7 +19,8 @@ public class ReimbursementsDAO implements CrudDAO<Reimbursements> {
 
     @Override
     public void save(Reimbursements obj) {
-        obj.setId(UUID.randomUUID().toString());
+        if (obj.getId() == null)
+            obj.setId(UUID.randomUUID().toString());
         try (Connection con = ConnectionFactory.getInstance().getConnection()){
             PreparedStatement ps = con.prepareStatement("INSERT INTO reimbursements (id, amount, submitted, resolved, " +
                     "description, receipt, payment_id, author_id, resolver_id, status_id, type_id) " +
