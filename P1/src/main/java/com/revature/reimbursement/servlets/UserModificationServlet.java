@@ -57,12 +57,7 @@ public class UserModificationServlet extends HttpServlet {
             //Fullfill request:
             UserModificationRequest request = mapper.readValue(req.getInputStream(), UserModificationRequest.class);
             switch(request.getRequestType()){
-                case "UPDATE":
-                    updateUser(request);
-                    break;
-                case "DELETE":
-                    deleteUser(request);
-                    break;
+
                 case "GETINFO":
                     Users user = getUserInfo(request);
                     resp.setContentType("application/json");
@@ -89,8 +84,87 @@ public class UserModificationServlet extends HttpServlet {
     }
 
 
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try{
+            //<editor-fold desc = "Verify User Authorized">
+            Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
 
+            if (requester == null) {
+                resp.setStatus(401); // UNAUTHORIZED
+                return;
+            }
 
+            if (!userRolesService.getById(requester.getRole()).getRole().equals("ADMIN")) {
+                resp.setStatus(403); // FORBIDDEN
+                return;
+            }
+
+            //</editor-fold desc">
+            UserModificationRequest request = mapper.readValue(req.getInputStream(), UserModificationRequest.class);
+            switch(request.getRequestType()){
+                case "UPDATE":
+                    updateUser(request);
+                    break;
+                default:
+                    throw new InvalidRequestException("Invalid user modification type.");
+            }
+            //Respond:
+            resp.setStatus(201); // CREATED
+            resp.setContentType("application/json");
+            resp.getWriter().write(mapper.writeValueAsString( request.getRequestType() + "Completed!" ));
+
+        } catch (InvalidRequestException e) {
+            resp.setStatus(404); // BAD REQUEST
+            e.printStackTrace();
+        } catch (ResourceConflictException e) {
+            resp.setStatus(409); // RESOURCE CONFLICT
+        } catch (Exception e) {
+            e.printStackTrace();
+            resp.setStatus(500);
+        }
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try{
+            //<editor-fold desc = "Verify User Authorized">
+            Principal requester = tokenService.extractRequesterDetails(req.getHeader("Authorization"));
+
+            if (requester == null) {
+                resp.setStatus(401); // UNAUTHORIZED
+                return;
+            }
+
+            if (!userRolesService.getById(requester.getRole()).getRole().equals("ADMIN")) {
+                resp.setStatus(403); // FORBIDDEN
+                return;
+            }
+
+            //</editor-fold desc">
+            UserModificationRequest request = mapper.readValue(req.getInputStream(), UserModificationRequest.class);
+
+            switch(request.getRequestType()){
+                case "DELETE":
+                    deleteUser(request);
+                    break;
+                default:
+                    throw new InvalidRequestException("Invalid user modification type.");
+            }
+            //Respond:
+            resp.setStatus(201); // CREATED
+            resp.setContentType("application/json");
+            resp.getWriter().write(mapper.writeValueAsString( request.getRequestType() + "Completed!" ));
+        } catch (InvalidRequestException e) {
+            resp.setStatus(404); // BAD REQUEST
+            e.printStackTrace();
+        } catch (ResourceConflictException e) {
+            resp.setStatus(409); // RESOURCE CONFLICT
+        } catch (Exception e) {
+            e.printStackTrace();
+            resp.setStatus(500);
+        }
+    }
 
     private Users getUserInfo(UserModificationRequest request) {
         return userService.getRowByColumnValue("username", "'" + request.getUsername() + "'");
