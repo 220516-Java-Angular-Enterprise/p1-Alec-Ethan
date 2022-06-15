@@ -64,7 +64,7 @@ public class ReimbursementServlet extends HttpServlet {
             String role = userRolesService.getById(requester.getRole()).getRole();
             String[] uris = req.getRequestURI().split("/");
             //USER IS AN ADMIN
-            if (!role.equals("ADMIN")) {
+            if (role.equals("ADMIN")) {
                 resp.setStatus(403); // FORBIDDEN
                 return;
             }
@@ -160,7 +160,7 @@ public class ReimbursementServlet extends HttpServlet {
             String role = userRolesService.getById(requester.getRole()).getRole();
             String[] uris = req.getRequestURI().split("/");
             //USER IS AN ADMIN
-            if (!role.equals("ADMIN")) {
+            if (role.equals("ADMIN")) {
                 resp.setStatus(403); // FORBIDDEN
                 return;
             }
@@ -172,7 +172,7 @@ public class ReimbursementServlet extends HttpServlet {
                 reimbursementRequest.setSubmitted(Timestamp.from(Instant.now()));
                 reimbursementRequest.setAuthor_id(requester.getId());
                 reimbursementRequest.setStatus_id("0"); // Sets status to PENDING
-                reimbursementRequest.setType(reimbursementTypesService.getIdByType(reimbursementRequest.getType()));
+                reimbursementRequest.setType_id(reimbursementTypesService.getIdByType(reimbursementRequest.getType()));
                 // Add the New Reimbursement:
                 Reimbursements createdRem = reimbursementsService.saveReimbursement(reimbursementRequest);
                 resp.setStatus(201); // CREATED
@@ -205,7 +205,7 @@ public class ReimbursementServlet extends HttpServlet {
             String role = userRolesService.getById(requester.getRole()).getRole();
             String[] uris = req.getRequestURI().split("/");
             //USER IS AN ADMIN
-            if (!role.equals("ADMIN")) {
+            if (role.equals("ADMIN")) {
                 resp.setStatus(403); // FORBIDDEN
                 return;
             }
@@ -238,7 +238,7 @@ public class ReimbursementServlet extends HttpServlet {
                         reimbursementUpdateRequest.setDescription(rem.getDescription());
                     if (reimbursementUpdateRequest.getType() == null)
                         reimbursementUpdateRequest.setType_id(reimbursementTypesService.getTypeById(rem.getType_id()));
-
+                    else reimbursementUpdateRequest.setType_id(reimbursementTypesService.getIdByType(reimbursementUpdateRequest.getType()));
                     reimbursementsService.updateReimbursement(reimbursementUpdateRequest);
                 }
             }

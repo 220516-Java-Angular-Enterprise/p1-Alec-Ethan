@@ -45,8 +45,10 @@ public class UsersDAO implements CrudDAO<Users> {
 
     //@Override
     public void update(Users obj, boolean isPasswordChanged) {
-        if (isPasswordChanged)
+        if (isPasswordChanged) {
+            delete(obj.getId());
             save(obj);
+        }
         else{
             try (Connection con = ConnectionFactory.getInstance().getConnection()){
                 PreparedStatement ps = con.prepareStatement("UPDATE users " +

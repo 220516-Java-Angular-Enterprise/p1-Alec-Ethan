@@ -79,7 +79,7 @@ class ReimbursementsServiceTest {
         newReimbursementRequestMock.setAmount(15.00);
         newReimbursementRequestMock.setSubmitted(Timestamp.from(Instant.now()));
         newReimbursementRequestMock.setDescription("");
-        newReimbursementRequestMock.setAuthor_id("fb1f34b7-ae8e-48d7-ac92-c82ee720acd4");
+        newReimbursementRequestMock.setAuthor_id("1");
         newReimbursementRequestMock.setStatus_id("0");
         newReimbursementRequestMock.setType("LODGING");
         newReimbursementRequestMock.setType_id("0");
@@ -89,14 +89,14 @@ class ReimbursementsServiceTest {
         statusChangeRequestMock.setStatus_id("0");
         statusChangeRequestMock.setRem_id("TestIDResolved");
         statusChangeRequestMock.setResolved(Timestamp.from(Instant.now()));
-        statusChangeRequestMock.setResolver_id("49e00c39-e18a-4be1-acaf-ada498240788");
+        statusChangeRequestMock.setResolver_id("2");
         reimbursementsService.updateReimbursementStatus(statusChangeRequestMock).getStatus_id();
 
         newReimbursementRequestMock.setId("TestID");
         newReimbursementRequestMock.setAmount(10.00);
         newReimbursementRequestMock.setSubmitted(Timestamp.from(Instant.now()));
         newReimbursementRequestMock.setDescription("");
-        newReimbursementRequestMock.setAuthor_id("fb1f34b7-ae8e-48d7-ac92-c82ee720acd4");
+        newReimbursementRequestMock.setAuthor_id("1");
         newReimbursementRequestMock.setStatus_id("0");
         newReimbursementRequestMock.setType("LODGING");
         newReimbursementRequestMock.setType_id("0");
@@ -130,7 +130,7 @@ class ReimbursementsServiceTest {
         newReimbursementRequestMock.setAmount(15.00);
         newReimbursementRequestMock.setSubmitted(Timestamp.from(Instant.now()));
         newReimbursementRequestMock.setDescription("");
-        newReimbursementRequestMock.setAuthor_id("fb1f34b7-ae8e-48d7-ac92-c82ee720acd4");
+        newReimbursementRequestMock.setAuthor_id("1");
         newReimbursementRequestMock.setStatus_id("0");
         newReimbursementRequestMock.setType("LODGING");
         newReimbursementRequestMock.setType_id("0");
@@ -140,14 +140,14 @@ class ReimbursementsServiceTest {
         statusChangeRequestMock.setStatus_id("0");
         statusChangeRequestMock.setRem_id("TestIDResolved");
         statusChangeRequestMock.setResolved(Timestamp.from(Instant.now()));
-        statusChangeRequestMock.setResolver_id("49e00c39-e18a-4be1-acaf-ada498240788");
+        statusChangeRequestMock.setResolver_id("2");
         reimbursementsService.updateReimbursementStatus(statusChangeRequestMock).getStatus_id();
 
         newReimbursementRequestMock.setId("TestID");
         newReimbursementRequestMock.setAmount(10.00);
         newReimbursementRequestMock.setSubmitted(Timestamp.from(Instant.now()));
         newReimbursementRequestMock.setDescription("");
-        newReimbursementRequestMock.setAuthor_id("fb1f34b7-ae8e-48d7-ac92-c82ee720acd4");
+        newReimbursementRequestMock.setAuthor_id("1");
         newReimbursementRequestMock.setStatus_id("0");
         newReimbursementRequestMock.setType("LODGING");
         newReimbursementRequestMock.setType_id("0");
@@ -158,7 +158,7 @@ class ReimbursementsServiceTest {
         statusChangeRequestMock.setStatus_id("0");
         statusChangeRequestMock.setRem_id("TestID");
         statusChangeRequestMock.setResolved(Timestamp.from(Instant.now()));
-        statusChangeRequestMock.setResolver_id("49e00c39-e18a-4be1-acaf-ada498240788");
+        statusChangeRequestMock.setResolver_id("2");
         assertEquals(statusChangeRequestMock.getStatus_id(), reimbursementsService.updateReimbursementStatus(statusChangeRequestMock).getStatus_id());
 
         //Null ID
