@@ -6,7 +6,10 @@ import com.revature.reimbursement.dtos.requests.ReimbursementUpdateRequest;
 import com.revature.reimbursement.dtos.requests.StatusChangeRequest;
 import com.revature.reimbursement.models.Reimbursements;
 import com.revature.reimbursement.util.annotations.Inject;
+import com.revature.reimbursement.util.customException.InvalidSQLException;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
 
 public class ReimbursementsService {
@@ -29,15 +32,22 @@ public class ReimbursementsService {
     }
 
     public Reimbursements updateReimbursement(NewReimbursementRequest rem) {
-        Reimbursements newRem = rem.extractReimbursement();
+        Reimbursements newRem = getById(rem.getId());
+        if (newRem.getAuthor_id() == null) throw new InvalidSQLException("Reimbursement Does not Exist.");
+        if (newRem.getResolved() != null) throw new InvalidSQLException("Reimbursement has already been resolved.");
+
+        newRem.setSubmitted(rem.getSubmitted());
+        newRem.setAmount(rem.getAmount());
+        newRem.setDescription(rem.getDescription());
+        newRem.setType_id(rem.getType_id());
+
         reimbursementsDAO.update(newRem);
         return newRem;
     }
 
     public Reimbursements updateReimbursementStatus(StatusChangeRequest rem) {
         Reimbursements newRem = getById(rem.getRem_id());
-        System.out.println(newRem.getAmount());
-        System.out.println(newRem.getId());
+        if (newRem.getResolved() != null) throw new InvalidSQLException("Reimbursement has already been resolved.");
         newRem.setStatus_id(rem.getStatus_id());
         newRem.setResolved(rem.getResolved());
         newRem.setResolver_id(rem.getResolver_id());

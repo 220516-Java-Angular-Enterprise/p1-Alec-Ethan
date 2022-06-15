@@ -81,7 +81,7 @@ public class UsersService {
     public List<Users> getAll() { return usersDAO.getAll(); }
 
     public void deleteUserByUsername(String username){
-        String id = getRowByColumnValue("username", username).getId();
+        String id = getRowByColumnValue("username", "'" + username + "'").getId();
         usersDAO.delete(id);
     }
 

@@ -12,9 +12,9 @@ public class ReimbursementUpdateRequest {
     private Timestamp submitted, resolved;
     private String description;
     private Blob receipt;
-    private String payment_id, author_id, resolver_id, status_id, type;
+    private String payment_id, author_id, resolver_id, status_id, type, type_id;
 
-    public ReimbursementUpdateRequest(String id, Double amount, Timestamp submitted, Timestamp resolved, String description, Blob receipt, String payment_id, String author_id, String resolver_id, String status_id, String type) {
+    public ReimbursementUpdateRequest(String id, Double amount, Timestamp submitted, Timestamp resolved, String description, Blob receipt, String payment_id, String author_id, String resolver_id, String status_id, String type, String type_id) {
         this.id = id;
         this.amount = amount;
         this.submitted = submitted;
@@ -26,6 +26,7 @@ public class ReimbursementUpdateRequest {
         this.resolver_id = resolver_id;
         this.status_id = status_id;
         this.type = type;
+        this.type_id = type_id;
     }
 
     //Not Null Constructor
@@ -133,6 +134,13 @@ public class ReimbursementUpdateRequest {
         this.type = type_id;
     }
 
+    public String getType_id() {
+        return type_id;
+    }
+
+    public void setType_id(String type_id) {
+        this.type_id = type_id;
+    }
 
     //</editor-fold>
 

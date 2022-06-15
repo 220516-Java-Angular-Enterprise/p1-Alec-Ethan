@@ -39,19 +39,19 @@ class ReimbursementsServiceTest {
     @Spy
     ReimbursementUpdateRequest reimbursementUpdateRequestMock = new ReimbursementUpdateRequest();
     //</editor-fold>
-
-
-
     @Test
     void saveReimbursement() {
+        //<editor-fold desc="@Mock Data">
+        newReimbursementRequestMock.setId("TestID");
+        newReimbursementRequestMock.setSubmitted(Timestamp.from(Instant.now()));
+        newReimbursementRequestMock.setDescription("");
+        newReimbursementRequestMock.setAuthor_id("fb1f34b7-ae8e-48d7-ac92-c82ee720acd4");
+        newReimbursementRequestMock.setType("LODGING");
+        newReimbursementRequestMock.setType_id("0");
+        //</editor-fold>
 
         // Null value in not null column (amount)
         newReimbursementRequestMock.setAmount(null);
-        newReimbursementRequestMock.setSubmitted(Timestamp.from(Instant.now()));
-        newReimbursementRequestMock.setDescription("");
-        newReimbursementRequestMock.setAuthor_id("0");
-        newReimbursementRequestMock.setStatus_id("0");
-        newReimbursementRequestMock.setType("LODGING");
         assertThrows(NullPointerException.class, ()->reimbursementsService.saveReimbursement(newReimbursementRequestMock));
 
         // Invalid Desc:
@@ -59,61 +59,118 @@ class ReimbursementsServiceTest {
         assertThrows(NullPointerException.class, ()->reimbursementsService.saveReimbursement(newReimbursementRequestMock));
 
         // Valid Reimbursement:
-        newReimbursementRequestMock.setAmount(0.00);
+        newReimbursementRequestMock.setAmount(10.00);
+        newReimbursementRequestMock.setStatus_id("0");
         doNothing().when(reimbursementsDAO).save(any());
         assertEquals(newReimbursementRequestMock.extractReimbursement().getId(), reimbursementsService.saveReimbursement(newReimbursementRequestMock).getId());
-        assertEquals(newReimbursementRequestMock.extractReimbursement().getAmount(), reimbursementsService.saveReimbursement(newReimbursementRequestMock).getAmount());
+
+
+
+
+        reimbursementsService.deleteReimbursement("TestID");
+        reimbursementsService.deleteReimbursement("TestIDResolved");
     }
 
 
     @Test
     void updateReimbursement() {
-        newReimbursementRequestMock.setId("0");
-        newReimbursementRequestMock.setAmount(10.0);
+        //<editor-fold desc="@Mock Data">
+        newReimbursementRequestMock.setId("TestIDResolved");
+        newReimbursementRequestMock.setAmount(15.00);
         newReimbursementRequestMock.setSubmitted(Timestamp.from(Instant.now()));
         newReimbursementRequestMock.setDescription("");
-        newReimbursementRequestMock.setAuthor_id("49e00c39-e18a-4be1-acaf-ada498240788");
+        newReimbursementRequestMock.setAuthor_id("fb1f34b7-ae8e-48d7-ac92-c82ee720acd4");
         newReimbursementRequestMock.setStatus_id("0");
+        newReimbursementRequestMock.setType("LODGING");
+        newReimbursementRequestMock.setType_id("0");
+        reimbursementsService.saveReimbursement(newReimbursementRequestMock);
+
+        statusChangeRequestMock.setStatus("APPROVED");
+        statusChangeRequestMock.setStatus_id("0");
+        statusChangeRequestMock.setRem_id("TestIDResolved");
+        statusChangeRequestMock.setResolved(Timestamp.from(Instant.now()));
+        statusChangeRequestMock.setResolver_id("49e00c39-e18a-4be1-acaf-ada498240788");
+        reimbursementsService.updateReimbursementStatus(statusChangeRequestMock).getStatus_id();
+
+        newReimbursementRequestMock.setId("TestID");
+        newReimbursementRequestMock.setAmount(10.00);
+        newReimbursementRequestMock.setSubmitted(Timestamp.from(Instant.now()));
+        newReimbursementRequestMock.setDescription("");
+        newReimbursementRequestMock.setAuthor_id("fb1f34b7-ae8e-48d7-ac92-c82ee720acd4");
+        newReimbursementRequestMock.setStatus_id("0");
+        newReimbursementRequestMock.setType("LODGING");
+        newReimbursementRequestMock.setType_id("0");
+        reimbursementsService.saveReimbursement(newReimbursementRequestMock);
+        //</editor-fold>
+
+        newReimbursementRequestMock.setId("TestID");
+        newReimbursementRequestMock.setAmount(20.0);
+        newReimbursementRequestMock.setSubmitted(Timestamp.from(Instant.now()));
+        newReimbursementRequestMock.setDescription("");
         newReimbursementRequestMock.setType("0");
+        newReimbursementRequestMock.setType_id("0");
         assertEquals(newReimbursementRequestMock.getAmount(), reimbursementsService.updateReimbursement(newReimbursementRequestMock).getAmount());
-        //assertThrows(NullPointerException.class, ()->reimbursementsService.updateReimbursement(newReimbursementRequestMock));
 
+        //Null ID
+        newReimbursementRequestMock.setId("Not an ID");
+        assertThrows(InvalidSQLException.class, ()->reimbursementsService.updateReimbursement(newReimbursementRequestMock));
 
+        //ID is Already Resolved
+        newReimbursementRequestMock.setId("TestIDResolved");
+        assertThrows(InvalidSQLException.class, ()->reimbursementsService.updateReimbursement(newReimbursementRequestMock));
 
+        reimbursementsService.deleteReimbursement("TestID");
+        reimbursementsService.deleteReimbursement("TestIDResolved");
     }
 
     @Test
     void updateReimbursementStatus() {
+        //<editor-fold desc="@Mock Data">
+        newReimbursementRequestMock.setId("TestIDResolved");
+        newReimbursementRequestMock.setAmount(15.00);
+        newReimbursementRequestMock.setSubmitted(Timestamp.from(Instant.now()));
+        newReimbursementRequestMock.setDescription("");
+        newReimbursementRequestMock.setAuthor_id("fb1f34b7-ae8e-48d7-ac92-c82ee720acd4");
+        newReimbursementRequestMock.setStatus_id("0");
+        newReimbursementRequestMock.setType("LODGING");
+        newReimbursementRequestMock.setType_id("0");
+        reimbursementsService.saveReimbursement(newReimbursementRequestMock);
+
         statusChangeRequestMock.setStatus("APPROVED");
         statusChangeRequestMock.setStatus_id("0");
-        statusChangeRequestMock.setRem_id("2");
-        //reimbursementsService.updateReimbursementStatus(statusChangeRequestMock);
-        //System.out.println(reimbursementsService.getById("0").getAmount());
+        statusChangeRequestMock.setRem_id("TestIDResolved");
+        statusChangeRequestMock.setResolved(Timestamp.from(Instant.now()));
+        statusChangeRequestMock.setResolver_id("49e00c39-e18a-4be1-acaf-ada498240788");
+        reimbursementsService.updateReimbursementStatus(statusChangeRequestMock).getStatus_id();
+
+        newReimbursementRequestMock.setId("TestID");
+        newReimbursementRequestMock.setAmount(10.00);
+        newReimbursementRequestMock.setSubmitted(Timestamp.from(Instant.now()));
+        newReimbursementRequestMock.setDescription("");
+        newReimbursementRequestMock.setAuthor_id("fb1f34b7-ae8e-48d7-ac92-c82ee720acd4");
+        newReimbursementRequestMock.setStatus_id("0");
+        newReimbursementRequestMock.setType("LODGING");
+        newReimbursementRequestMock.setType_id("0");
+        reimbursementsService.saveReimbursement(newReimbursementRequestMock);
+        //</editor-fold>
+
+        statusChangeRequestMock.setStatus("APPROVED");
+        statusChangeRequestMock.setStatus_id("0");
+        statusChangeRequestMock.setRem_id("TestID");
+        statusChangeRequestMock.setResolved(Timestamp.from(Instant.now()));
+        statusChangeRequestMock.setResolver_id("49e00c39-e18a-4be1-acaf-ada498240788");
         assertEquals(statusChangeRequestMock.getStatus_id(), reimbursementsService.updateReimbursementStatus(statusChangeRequestMock).getStatus_id());
 
+        //Null ID
+        newReimbursementRequestMock.setId("Not");
+        assertThrows(InvalidSQLException.class, ()->reimbursementsService.updateReimbursementStatus(statusChangeRequestMock));
+
+        //ID is Already Resolved
+        newReimbursementRequestMock.setId("TestIDResolved");
+        assertThrows(InvalidSQLException.class, ()->reimbursementsService.updateReimbursementStatus(statusChangeRequestMock));
+
+        reimbursementsService.deleteReimbursement("TestID");
+        reimbursementsService.deleteReimbursement("TestIDResolved");
     }
 
-    @Test
-    void deleteReimbursement() {
-    }
-
-    @Test
-    void getById() {
-    }
-
-    @Test
-    void getAll() {
-    }
-
-    @Test
-    void getAllByAuthorID() {
-    }
-
-    @Test
-    void getRowByColumnValue() {
-    }
-
-    @Test
-    void getAllRowsByColumnValue() {
-    }
 }

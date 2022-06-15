@@ -225,11 +225,6 @@ public class ReimbursementServlet extends HttpServlet {
                     statusChangeRequest.setResolved(Timestamp.from(Instant.now()));
                     reimbursementsService.updateReimbursementStatus(statusChangeRequest);
 
-                    /*rem.setStatus_id(reimbursementStatusService.getIdByStatus(statusChangeRequest.getStatus()));
-                    rem.setResolver_id(requester.getId());
-                    rem.setResolved(Timestamp.from(Instant.now()));
-                    reimbursementsService.updateReimbursement(rem);*/
-
                 } else if (role.equals("EMPLOYEE")) {
                     // Update Reimbursement
                     // Should I have the user just create a brand new Rem or have them only fill in
@@ -242,18 +237,9 @@ public class ReimbursementServlet extends HttpServlet {
                     if (reimbursementUpdateRequest.getDescription() == null)
                         reimbursementUpdateRequest.setDescription(rem.getDescription());
                     if (reimbursementUpdateRequest.getType() == null)
-                        reimbursementUpdateRequest.setType(reimbursementTypesService.getTypeById(rem.getType_id()));
+                        reimbursementUpdateRequest.setType_id(reimbursementTypesService.getTypeById(rem.getType_id()));
 
                     reimbursementsService.updateReimbursement(reimbursementUpdateRequest);
-                    /*rem.setSubmitted(Timestamp.from(Instant.now()));
-                    if (reimbursementUpdateRequest.getAmount() != null)
-                        rem.setAmount(reimbursementUpdateRequest.getAmount());
-                    if (reimbursementUpdateRequest.getDescription() != null)
-                        rem.setDescription(reimbursementUpdateRequest.getDescription());
-                    if (reimbursementUpdateRequest.getType() != null)
-                        rem.setType_id(reimbursementTypesService.getIdByType(reimbursementUpdateRequest.getType()));
-
-                    reimbursementsService.updateReimbursement(rem);*/
                 }
             }
         } catch (InvalidRequestException e) {
