@@ -59,6 +59,7 @@ public class UsersService {
 
     public Users register(NewUserRequest request) {
         Users user = request.extractUser();
+        user.setIs_active(false);
 
         if (isNotDuplicateUsername(user.getUsername())) {
             if (isValidUsername(user.getUsername())) {
